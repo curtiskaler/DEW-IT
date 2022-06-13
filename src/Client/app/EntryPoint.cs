@@ -1,13 +1,14 @@
-﻿namespace HelloWorld;
+﻿namespace DewIt.Client;
 
-public static class MauiProgram
+public static class EntryPoint
 {
 	public static MauiApp CreateMauiApp()
 	{
+        System.Diagnostics.Debug.WriteLine("MauiProgram!");
 		var builder = MauiApp.CreateBuilder();
 
 		builder
-			.UseMauiApp<App>()
+			.UseMauiApp<DewItApp>()
 			.ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

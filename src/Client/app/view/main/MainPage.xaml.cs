@@ -1,4 +1,4 @@
-﻿namespace HelloWorld;
+﻿namespace DewIt.Client.view.main;
 
 public partial class MainPage : ContentPage
 {
@@ -6,7 +6,8 @@ public partial class MainPage : ContentPage
 
 	public MainPage()
 	{
-		InitializeComponent();
+        System.Diagnostics.Debug.WriteLine("MainPage!");
+        InitializeComponent();
 	}
 
 	private void OnCounterClicked(object sender, EventArgs e)
