@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace HelloWorld;
+namespace DewIt;
 
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate

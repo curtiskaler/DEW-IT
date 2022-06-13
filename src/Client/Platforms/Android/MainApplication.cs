@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace HelloWorld;
+namespace DewIt;
 
 [Application]
 public class MainApplication : MauiApplication
@@ -11,5 +11,5 @@ public class MainApplication : MauiApplication
 	{
 	}
 
-	protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
+	protected override MauiApp CreateMauiApp() => EntryPoint.CreateMauiApp();
 }
