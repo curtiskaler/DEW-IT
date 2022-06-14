@@ -1,9 +1,9 @@
 ﻿using Foundation;
 
-namespace DewIt;
+namespace DewIt.Client;
 
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate
 {
-	protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
+	protected override MauiApp CreateMauiApp() => EntryPoint.CreateMauiApp();
 }

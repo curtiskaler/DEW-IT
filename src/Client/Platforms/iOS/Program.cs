@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace DewIt;
+namespace DewIt.Client;
 
 public class Program
 {

@@ -46,7 +46,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="app\model\" />
 	  <Folder Include="app\view-model\" />
 	</ItemGroup>
 

@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace DewIt;
+namespace DewIt.Client;
 
 [Application]
 public class MainApplication : MauiApplication
