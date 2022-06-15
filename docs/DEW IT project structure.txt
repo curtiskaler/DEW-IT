@@ -48,51 +48,81 @@ root/
         EntryPoint.cs
 
         Model << (the SHARED "model": stuff that cannot be restricted to a single feature)
-            Algorithms      (code that DOES stuff; "services": DataControllers, DataProviders, Extensions, Queries)
+            Algorithms      (code that DOES stuff; "services":
+			    [DataControllers, DataProviders, Extensions, Queries]
                             (broken up by concept)
                 Extensions
-                
-                Persistence
-                    IPersistenceService.cs
-                                               
-                Configuration
-                    IConfigService.cs
                     
             DataTypes       (code that DOES NOT do stuff; DTOs)
-                Interfaces << (For Data Type Classes)
-                    IFilterService.cs
-                    ISearchService.cs
-                    INotificationService.cs
-                    IRepository.cs
-                Collections
-                Enums
+                		[Interfaces, Collections, Enums] << (For Data Type Classes)
+                
+			IProject
+			IBoard
+			ICard
+
 
         Dev << (to be deleted before release, e.g., for bootstrapping w/o a backend)
             DevRepository.cs
         
-        Features    (separated by functional area)
-                   
-            ApplicationLifeCycle  (Startup/boostrapping/persistence/shutdown code; CRUD for the APPLICATION)
-                App.xaml
-                App.xaml.cs
-                "StartupService.cs"
-                "ShutdownService.cs"
 
+ 	Infrastructure  (cross-cutting concerns; NO domain-specific objects or logic) 
+			(ALL services are abstractions) 
+			(no custom views here: they all take "plugins")
+
+                App.xaml
+                App.xaml.cs                
+		"IStartupService.cs"
+                "IShutdownService.cs"
                 IBootstrapper.cs
-                Bootstrapper.cs
-                
-                
-            (Application)Shell       (The application window)
-                IMainWindowViewModel.cs
-                MainWindowViewModel.cs
-                MainWindow.xaml
-                MainWindow.xaml.cs
-                Resources
-                    Images
-                    Fonts... etc.
+
+	  	MainWindow       (The application window)
+        		IMainWindowViewModel.cs
+                	MainWindow.xaml
+                	MainWindow.xaml.cs
+                	Resources
+                    	Images
+                    	Fonts... etc.
                     
                 NavBar
+			INavigationService                
 
+		Configuration
+			IConfigurationService
+
+		Persistence
+			IRepository
+			IPersistenceService
+
+		Themes
+			IThemeService
+
+		Logging
+			ILogger
+
+		Filtering
+			IFilterService
+
+		Searching
+			ISearchService
+	
+		Notifications
+			INotificationService.cs
+                    
+		Settings
+		    ISettingsHubViewModel.cs
+                    SettingsHubView.xaml
+                    SettingsHubView.xaml.cs
+                    
+
+
+        Features    (domain features, separated by view or what a user would call it)
+	    MainWindow
+                MainWindowViewModel.cs
+		Bootstrapper.cs
+
+	    NavBar
+
+           
             Splash
                 SplashPage.xaml
                 SplashPage.xaml.cs
@@ -133,14 +163,9 @@ root/
                 ...etc. (see above)
                     
             Settings        
+                SettingsHubViewModel.cs
+                    
                 
-                SettingsHub
-                    ISettingsHubViewModel.cs
-                    SettingsHubViewModel.cs
-                    SettingsHubView.xaml
-                    SettingsHubView.xaml.cs
-                    "SettingsHubService.cs" 
-
                     Themes
                         IThemesViewModel.cs
                         ThemesViewModel.cs
