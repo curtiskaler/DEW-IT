@@ -1,6 +1,4 @@
-﻿using Model.enumerations;
-
-namespace DewIt.Client.model.enumerations
+﻿namespace DewIt.Client.model.enumerations
 {
 
     public interface IHistoryEntry : IHaveTimestamp, IHaveOwner

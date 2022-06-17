@@ -2,6 +2,6 @@
 {
     public interface IUnique
     {
-        string Id { get; }
+        public string Id { get; }
     }
 }

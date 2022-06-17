@@ -1,4 +1,6 @@
-﻿namespace DewIt.Client;
+﻿using DewIt.Client.infrastructure;
+
+namespace DewIt.Client;
 
 public static class EntryPoint
 {
