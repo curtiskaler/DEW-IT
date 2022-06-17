@@ -1,6 +1,6 @@
-﻿using DewIt.Client.view.shell;
+﻿using DewIt.Client.infrastructure.shell;
 
-namespace DewIt.Client;
+namespace DewIt.Client.infrastructure;
 
 public partial class DewItApp : Application
 {

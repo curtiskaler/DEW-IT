@@ -46,7 +46,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="app\view-model\" />
+	  <Folder Include="src\dev\" />
+	  <Folder Include="src\model\algorithms\" />
 	</ItemGroup>
 
 </Project>

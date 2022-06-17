@@ -56,9 +56,9 @@ root/
             DataTypes       (code that DOES NOT do stuff; DTOs)
                 		[Interfaces, Collections, Enums] << (For Data Type Classes)
                 
-			IProject
-			IBoard
-			ICard
+                IProject
+                IBoard
+                ICard
 
 
         Dev << (to be deleted before release, e.g., for bootstrapping w/o a backend)
