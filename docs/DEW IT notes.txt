@@ -1,0 +1,44 @@
+
+https://timdeschryver.dev/blog/maybe-its-time-to-rethink-our-project-structure-with-dot-net-6#a-domain-driven-api
+
+https://social.msdn.microsoft.com/Forums/vstudio/en-US/300cde7a-a853-4d5d-b1a1-d92a246a60e0/mvvm-best-practices-folders-and-namespaces?forum=wpf
+
+https://stackoverflow.com/questions/18825888/project-structure-for-mvvm-in-wpf
+
+Lots of people use patterns like MVC or MVVM. I like some of the concepts, but the words aren't especially intention-revealing... for example, what exactly does "model" mean? The immediate response from many developers is simply, "data model!"  Okay, so what IS the "data model"?
+
+Lots of programming words get overloaded and obfuscated behind the mists of "this is how WE do it", so I've decided to avoid as many overloaded words as possible.  The folder structure should be very intention-revealing, and easy for a newb to navigate.
+
+Definitions:
+    Anemic:             Having no behavior (no methods or closures. "Does" NOTHING.)
+    
+    DTOs                "Data transfer object": an anemic data object.
+    
+    Entity              A persisted data object
+    
+    Service             handles business logic
+    
+    Repository          A service that reads/writes to where the entities are stored
+        
+    Controller          A service that defines a REST endpoint
+    
+    [<subject>] Model   The algorithms and datatypes [of the <subject>]. 
+                        Business logic with no knowledge of the user or view. (No formatting code goes here!)
+                        
+    View                A visible element of the UI, bound to a ViewModel, 
+                        with no knowledge of how the data appears there
+                        
+    ViewModel           Connects the View to the Model.
+                        Uses the model (algorithms and datatypes) to generate the formatted data for the view
+                        includes logic to handle user interaction (clicks, keystrokes, taps, and swipes)
+
+    Interface           An abstraction defining the properties and/or method signatures of a piece of code
+                        "Interfaces" are anemic, meaning that they don't implement any behavior, they only define the method signature.
+                        These abstractions are useful for adhering to SOLID design principles (especially the S, L, and I) as well as (at least in C#) testing a unit of code (e.g., a class) without the tests depending on the dependencies working properly (or even existing).
+                        Each piece of behavior will be hidden behind an interface, and interfaces will be only be extracted into separate files when they need to be (shared).
+                        (NOTE: In C#, there are (at least?) two types of "Interface": interfaces and abstract classes.
+                        Abstract classes are useful when you need multiple types of a class, which all inherit the same behavior. They're dangerous because they lock every subclass into that behavior. They're not BAD, just be aware of the possible drawbacks. Abstract classes make good factories, but when you add OTHER behavior, you risk violating the S, O, and I. This is why I'll use plain-old interfaces for DTOs, and abstract classes whenever a factory becomes useful [likely quite often].)
+    
+
+"MVFU":
+    
