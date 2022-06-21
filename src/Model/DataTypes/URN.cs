@@ -1,7 +1,4 @@
-﻿using System.Globalization;
-using System.Runtime.Serialization;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 
@@ -12,8 +9,11 @@ namespace DewIt.Model.DataTypes
 {
     [Serializable]
     [XmlRoot("URN", IsNullable = true)]
-    public class URN : Uri, ISerializable
+    public class URN : Uri
     {
+        public const string URNScheme = "urn";
+        public const string AttributeName = "namestring";
+
         private const RegexOptions URNRegexOptions = RegexOptions.Singleline | RegexOptions.CultureInvariant;
 
         private static readonly Regex URNRegex =
@@ -34,17 +34,17 @@ namespace DewIt.Model.DataTypes
 
         public string AssignedName => Scheme + ":" + NID + ":" + NSS;
 
-        [DataMember(IsRequired = true), XmlAttribute()]
-        public string Urn
+        [DataMember(Name=AttributeName,IsRequired = true), XmlAttribute(AttributeName)]
+        public string NameString
         {
             get => AssignedName +
-                       (string.IsNullOrWhiteSpace(RComponent)
-                           ? ""
-                           : "?+" + RComponent) +
-                       (string.IsNullOrWhiteSpace(QComponent)
-                           ? ""
-                           : "?=" + QComponent) +
-                       (string.IsNullOrWhiteSpace(FComponent) ? "" : "#" + FComponent);
+                   (string.IsNullOrWhiteSpace(RComponent)
+                       ? ""
+                       : "?+" + RComponent) +
+                   (string.IsNullOrWhiteSpace(QComponent)
+                       ? ""
+                       : "?=" + QComponent) +
+                   (string.IsNullOrWhiteSpace(FComponent) ? "" : "#" + FComponent);
             set
             {
                 var that = new URN(value);
@@ -63,7 +63,7 @@ namespace DewIt.Model.DataTypes
         /// <exception cref="FormatException"></exception>
         public URN(string urnString) : base(urnString, UriKind.Absolute)
         {
-            if (!string.Equals(Scheme, nameof(Urn), StringComparison.InvariantCultureIgnoreCase))
+            if (!string.Equals(Scheme, URNScheme, StringComparison.InvariantCultureIgnoreCase))
             {
                 throw new FormatException($"URN scheme must be 'urn'.");
             }
@@ -87,22 +87,6 @@ namespace DewIt.Model.DataTypes
             FComponent ??= "";
         }
 
-        /// <summary> Serialization/deserialization constructor. </summary>
-        protected URN(SerializationInfo info, StreamingContext streamingContext) : base(info.GetString(nameof(Urn)) ??
-            string.Empty)
-        {
-            if (string.IsNullOrWhiteSpace(NID))
-                throw new InvalidOperationException("Cannot deserialize a URN without a NID.");
-
-            if (string.IsNullOrWhiteSpace(NSS))
-                throw new InvalidOperationException("Cannot deserialize a URN without a NSS.");
-
-            RComponent ??= "";
-            QComponent ??= "";
-            FComponent ??= "";
-        }
-
-
         public URN WithRComponent(string rComponent)
         {
             RComponent = rComponent;
@@ -121,7 +105,7 @@ namespace DewIt.Model.DataTypes
             return this;
         }
 
-        public override string ToString() => Urn;
+        public override string ToString() => NameString;
 
 
         #region Equality
@@ -130,7 +114,6 @@ namespace DewIt.Model.DataTypes
         {
             if (ReferenceEquals(other, this)) return true;
             if (other is not URN u) return false;
-            if (!string.Equals(Scheme, u.Scheme, StringComparison.InvariantCultureIgnoreCase)) return false;
             if (!string.Equals(NID, u.NID, StringComparison.InvariantCultureIgnoreCase)) return false;
 
             var thisNSS = NSS.CapitalizePCTEncoding();
@@ -157,74 +140,6 @@ namespace DewIt.Model.DataTypes
         }
 
         #endregion
-
-        #region Serialization
-
-        protected new virtual void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            if (info == null)
-                throw new ArgumentNullException(nameof(info));
-
-            info.AddValue(nameof(Urn), Urn);
-        }
-
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            if (info == null)
-                throw new ArgumentNullException(nameof(info));
-
-            GetObjectData(info, context);
-        }
-
-
-        #endregion
-    }
-
-    public class JsonURNConverter : JsonConverter<URN>
-    {
-        private const string urnKey = "urn";
-
-        public override URN? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            if (reader.TokenType != JsonTokenType.StartObject)
-            {
-                throw new JsonException();
-            }
-
-            URN? urn = null;
-            while (reader.Read())
-            {
-                if (reader.TokenType == JsonTokenType.EndObject)
-                {
-                    return urn;
-                }
-
-                // Get the key.
-                if (reader.TokenType != JsonTokenType.PropertyName)
-                {
-                    throw new JsonException();
-                }
-
-                var propertyName = reader.GetString();
-                if (propertyName != urnKey) throw new JsonException("Unable to convert URN.");
-
-                // Get the value.
-                reader.Read();
-                var value = reader.GetString()!;
-                urn = new URN(value);
-            }
-
-            throw new JsonException();
-        }
-
-        public override void Write(Utf8JsonWriter writer, URN value, JsonSerializerOptions options)
-        {
-            writer.WriteStartObject();
-
-            writer.WritePropertyName(options.PropertyNamingPolicy?.ConvertName(urnKey) ?? urnKey);
-            writer.WriteStringValue(string.Format(value.Urn, CultureInfo.InvariantCulture));
-            writer.WriteEndObject();
-        }
     }
 
     internal static class URNExtensions
