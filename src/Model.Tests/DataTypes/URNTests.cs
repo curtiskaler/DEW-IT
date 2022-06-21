@@ -1,4 +1,10 @@
+using System.Diagnostics;
 using DewIt.Model.DataTypes;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.Json;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace DewIt.Model.Tests.DataTypes;
 
@@ -45,6 +51,8 @@ public class URNTests
             Assert.That(urn.RComponent, Is.EqualTo(RComponent ?? ""));
             Assert.That(urn.QComponent, Is.EqualTo(QComponent ?? ""));
             Assert.That(urn.FComponent, Is.EqualTo(FComponent ?? ""));
+
+            Assert.That(urn.Urn, Is.EqualTo(urnString));
         });
     }
 
@@ -62,17 +70,6 @@ public class URNTests
 
     [TestCase("urn://www.example.com")]
     public void Ctor_urnString_ThrowsForBadNIDFormatting(string urnString)
-    {
-        var ex = Assert.Throws<FormatException>(() =>
-        {
-            var x = new URN(urnString);
-            Console.WriteLine(x);
-        });
-        Assert.That(ex?.Message, Is.EqualTo("URN's NID is invalid."));
-    }
-
-    [TestCase("urn:example:abc12%3")]
-    public void Ctor_urnString_ThrowsForBadNSSFormatting(string urnString)
     {
         var ex = Assert.Throws<FormatException>(() =>
         {
@@ -159,7 +156,119 @@ public class URNTests
 #pragma warning disable NUnit2010 // Use EqualConstraint for better assertion messages in case of failure
         Assert.That(a.Equals(b), Is.True);
 #pragma warning restore NUnit2010 // Use EqualConstraint for better assertion messages in case of failure
-
     }
 
+    [Test]
+    public void Equals_WrongType()
+    {
+        const string urn1 = "urn:example:a123,z456";
+        var a = new URN(urn1);
+        var b = new List<string>{urn1};
+        
+        Assert.That(a.Equals(b), Is.False);
+    }
+
+    [Test]
+    public void WithRComponent_Works()
+    {
+        var urn = new URN("urn:example:a123,z456");
+        const string component = "r!";
+
+        var result = urn.WithRComponent(component);
+
+        Assert.That(result.RComponent, Is.EqualTo(component));
+    }
+
+    [Test]
+    public void WithQComponent_Works()
+    {
+        var urn = new URN("urn:example:a123,z456");
+        const string component = "q!";
+
+        var result = urn.WithQComponent(component);
+
+        Assert.That(result.QComponent, Is.EqualTo(component));
+    }
+
+    [Test]
+    public void WithFComponent_Works()
+    {
+        var urn = new URN("urn:example:a123,z456");
+        const string component = "f!";
+
+        var result = urn.WithFComponent(component);
+
+        Assert.That(result.FComponent, Is.EqualTo(component));
+    }
+
+    [TestCase("example", "a123,z456", null, null, null)]
+    [TestCase("example", "a123,z456", null, null, "789")]
+    [TestCase("example", "a123,z456", null, "xyz", "789")]
+    [TestCase("example", "a123,z456", "abc", null, "789")]
+    [TestCase("example", "a123,z456", null, "xyz", null)]
+    [TestCase("example", "a123,z456", "abc", "xyz", null)]
+    [TestCase("example", "a123,z456", "abc", null, null)]
+    [TestCase("example", "a123,z456", "abc", "xyz", "789")]
+    public void Types_AreSerializableToJSON(string NID, string NSS, string? RComponent, string? QComponent,
+        string? FComponent)
+    {
+        var urnString = ResolveString(NID, NSS, RComponent, QComponent, FComponent);
+        var urn = new URN(urnString);
+        var options = new JsonSerializerOptions
+            { WriteIndented = true, PropertyNameCaseInsensitive = true, Converters = { new JsonURNConverter() } };
+
+        string jsonString = JsonSerializer.Serialize(urn, options);
+        var deserialized = JsonSerializer.Deserialize<URN>(jsonString, options);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(deserialized, Is.Not.Null);
+            Assert.That(deserialized!.AssignedName, Is.EqualTo($"{Scheme}:{NID}:{NSS}"));
+            Assert.That(deserialized.Scheme, Is.EqualTo(Scheme));
+            Assert.That(deserialized.NID, Is.EqualTo(NID));
+            Assert.That(deserialized.NSS, Is.EqualTo(NSS));
+            Assert.That(deserialized.RComponent, Is.EqualTo(RComponent ?? ""));
+            Assert.That(deserialized.QComponent, Is.EqualTo(QComponent ?? ""));
+            Assert.That(deserialized.FComponent, Is.EqualTo(FComponent ?? ""));
+            Assert.That(deserialized.Urn, Is.EqualTo(urnString));
+        });
+    }
+
+    [TestCase("example", "a123,z456", null, null, null)]
+    [TestCase("example", "a123,z456", null, null, "789")]
+    [TestCase("example", "a123,z456", null, "xyz", "789")]
+    [TestCase("example", "a123,z456", "abc", null, "789")]
+    [TestCase("example", "a123,z456", null, "xyz", null)]
+    [TestCase("example", "a123,z456", "abc", "xyz", null)]
+    [TestCase("example", "a123,z456", "abc", null, null)]
+    [TestCase("example", "a123,z456", "abc", "xyz", "789")]
+    public void Types_AreSerializableToXML(string NID, string NSS, string? RComponent, string? QComponent,
+        string? FComponent)
+    {
+        var urnString = ResolveString(NID, NSS, RComponent, QComponent, FComponent);
+        var urn = new URN(urnString);
+        var serializer = new XmlSerializer(typeof(URN));
+        var deserializer = new XmlSerializer(typeof(URN));
+        var stream = new MemoryStream();
+        
+        serializer.Serialize(stream, urn);
+        
+        stream.Seek(0L, SeekOrigin.Begin); // rewind the stream
+        
+        var deserialized = (URN)deserializer.Deserialize(stream)!;
+        stream.Close();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(deserialized, Is.Not.Null);
+            Assert.That(deserialized.AssignedName, Is.EqualTo($"{Scheme}:{NID}:{NSS}"));
+            Assert.That(deserialized.Scheme, Is.EqualTo(Scheme));
+            Assert.That(deserialized.NID, Is.EqualTo(NID));
+            Assert.That(deserialized.NSS, Is.EqualTo(NSS));
+            Assert.That(deserialized.RComponent, Is.EqualTo(RComponent ?? ""));
+            Assert.That(deserialized.QComponent, Is.EqualTo(QComponent ?? ""));
+            Assert.That(deserialized.FComponent, Is.EqualTo(FComponent ?? ""));
+            Assert.That(deserialized.Urn, Is.EqualTo(urnString));
+        });
+    }
 }
