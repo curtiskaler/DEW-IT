@@ -1,6 +1,5 @@
 ﻿namespace DewIt.Model.DataTypes
 {
-
     public interface IHistoryEntry : IHaveTimestamp, IHaveOwner
     {
         HistoryEntryType ChangeType { get; set; }
@@ -25,7 +24,7 @@
 
     public interface IPropertyChangeEntry<TEntity, TProp> : IHistoryEntry<TEntity>, IUpdateEntry<TProp>
     {
-        String Property { get; set; }
+        string Property { get; set; }
     }
 
     public interface IMoveEntry : IUpdateEntry<IGenealogy>

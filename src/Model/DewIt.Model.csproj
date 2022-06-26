@@ -7,8 +7,4 @@
 	  <RootNamespace>DewIt.Model</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Algorithms\" />
-  </ItemGroup>
-
 </Project>
