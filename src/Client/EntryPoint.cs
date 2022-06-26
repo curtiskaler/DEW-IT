@@ -10,7 +10,7 @@ public static class EntryPoint
 		var builder = MauiApp.CreateBuilder();
 
 		builder
-			.UseMauiApp<DewItApp>()
+			.UseMauiApp<DewItClient>()
 			.ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

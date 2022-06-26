@@ -9,6 +9,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DewIt.Model.Tests", "Model.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DewIt.Model", "Model\DewIt.Model.csproj", "{1C2B483E-83F9-4109-ADF8-3C75C232D91E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{F83FC2A3-64ED-4619-AEB6-783BD7F556E2}"
+	ProjectSection(SolutionItems) = preProject
+		..\docs\definitions.md = ..\docs\definitions.md
+		..\docs\DEW IT design.pptx = ..\docs\DEW IT design.pptx
+		..\docs\lessons.md = ..\docs\lessons.md
+		..\docs\plugins.md = ..\docs\plugins.md
+		..\docs\project structure.md = ..\docs\project structure.md
+		..\docs\salt.md = ..\docs\salt.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

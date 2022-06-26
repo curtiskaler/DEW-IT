@@ -1,12 +1,12 @@
-﻿using DewIt.Client.infrastructure;
+﻿using DewIt.Model.DataTypes;
+using DewIt.Model.Infrastructure;
 
-namespace DewIt.Dev
+namespace DewIt.Client.Dev;
+
+internal class DevBootstrapper : IBootstrapper<DewItState>
 {
-    internal class DevBootstrapper : IBootstrapper
+    public void Bootstrap(DewItState state)
     {
-        public void Bootstrap()
-        {
-            throw new NotImplementedException();
-        }
+        System.Diagnostics.Debug.WriteLine("Dev bootstrapping!");
     }
 }

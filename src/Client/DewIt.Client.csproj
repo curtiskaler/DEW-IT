@@ -49,4 +49,10 @@
 	  <ProjectReference Include="..\Model\DewIt.Model.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="Infrastructure\DewItClient.xaml.cs">
+	    <DependentUpon>DewItClient.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
 </Project>

@@ -2,6 +2,6 @@
 {
     public interface IHaveColor
     {
-        String Color { get; set; }
+        string Color { get; }
     }
 }

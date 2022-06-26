@@ -11,11 +11,11 @@ namespace DewIt.Model.DataTypes
     [XmlRoot("URN", IsNullable = true)]
     public class URN : Uri
     {
-        public const string URNScheme = "urn";
         public const string AttributeName = "namestring";
 
-        private const RegexOptions URNRegexOptions = RegexOptions.Singleline | RegexOptions.CultureInvariant;
+        public static readonly string URNScheme = "urn";
 
+        private static readonly RegexOptions URNRegexOptions = RegexOptions.Singleline | RegexOptions.CultureInvariant;
         private static readonly Regex URNRegex =
             new(
                 "\\A(?i:urn:(?!urn:)(?<nid>[a-z0-9][a-z0-9-]{1,31}):(?<nss>(?:[-a-z0-9()+,.:=@;$_!*'&~\\/]|%[0-9a-f]{2})+)(?:\\?\\+(?<rcomponent>.*?))?(?:\\?=(?<qcomponent>.*?))?(?:#(?<fcomponent>.*?))?)\\z",

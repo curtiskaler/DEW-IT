@@ -2,10 +2,10 @@
 {
     public interface IGenealogy
     {
-        IProject Project { get; set; }
-        IBoard Board { get; set; }
-        IGroup Group { get; set; }
-        ILane Lane { get; set; }
-        ICard Card { get; set; }
+        URN Project { get; set; }
+        URN Board { get; set; }
+        URN Group { get; set; }
+        URN Lane { get; set; }
+        URN Card { get; set; }
     }
 }
