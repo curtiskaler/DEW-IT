@@ -142,22 +142,13 @@ Project
  ├── .vscode      << likely unignored for more specific style rules
  ├── .idea        << likely unignored for more specific style rules
  │
- ├── build          << config files / scripts for building
- │    │                (may not need individualized folders...)
- │    ├── ansible
+ ├── conf         << config files 
  │    ├── ci
- │    │     .gitlab-ci.yml (but only if we CANNOT stuff it in the build/ci folder)
- │    ├── docker
  │    ├── gradle
- │    ├── scripts   << scripts for building
+ │    ├── (other special conf folders)
  │    ┊
  │
- ├── [output]
- │     ├── build    << intermediary build folder
- │     ├── dist     << final built objects, license files, readme, docs, etc.
- │     └── pack     << The zipped installer / deployment package
- │   
- ├── docs
+  ├── docs
  │    ├── developer
  │    │     CODE_OF_CONDUCT.md
  │    │     CONTRIBUTING.md
@@ -168,18 +159,26 @@ Project
  │    │     cool-idea.md
  │    │     *<etc>.*
  │    │     
- │    ├── licenses            << (license files for dependencies)
- │    ┊      *<licenses>.*
+ │    ├── licenses	<< (license files for dependencies)
+ │    ┊     *<licenses>.*
  │      
+ ├── local		  << LOCAL (developer-machine-specific) config files. 
+ │    │   <special template files>.*
+ │    │
+ │    ├── <hostname> 	<< all subfolders gitignored
+ │    ┊ 
+ │    
+ ├── [output]
+ │     ├── dev      << intermediary build folder
+ │     ├── prod     << final release-mode built objects, license files, readme, docs, etc.
+ │     └── release  << installers / deployment packages
+ │   
+ ├── resources		<< (non-code things to be packaged)
+ │          			[docs, config file templates, etc.]
+ │      
+ ├── scripts      	<< scripts for building
+ │
  ├── src
- │    ├── dev                 << dev packages
- │    │    ├── dev-env-builder
- │    │    ├── fake-data-loader
- │    │    ├── fake-backend
- │    │    ├── plugin-builder
- │    │    ├── <action-simplifier>
- │    │    ┊    etc.
- │    │ 
  │    ├── csharp
  │    │    │
  │    │    │   <Project>.sln
