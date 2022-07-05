@@ -1,4 +1,4 @@
-﻿# Project Structure #
+﻿# Client Solution Structure #
 This will be an evolving document. As things make sense, things will change.
 For example, when I realized that plugins might be desirable, it made sense to 
 split the truly cross-cutting concerns into a separate library (Model.csproj),

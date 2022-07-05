@@ -10,15 +10,18 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DewIt.Model", "Model\DewIt.Model.csproj", "{1C2B483E-83F9-4109-ADF8-3C75C232D91E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{F83FC2A3-64ED-4619-AEB6-783BD7F556E2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "design", "design", "{069322FD-4710-40D3-A9B4-99EF212977F0}"
 	ProjectSection(SolutionItems) = preProject
-		..\docs\definitions.md = ..\docs\definitions.md
-		..\docs\DEW IT design.pptx = ..\docs\DEW IT design.pptx
-		..\docs\lessons.md = ..\docs\lessons.md
-		..\docs\multi-language structure.md = ..\docs\multi-language structure.md
-		..\docs\plugins.md = ..\docs\plugins.md
-		..\docs\project structure.md = ..\docs\project structure.md
-		..\docs\salt.md = ..\docs\salt.md
+		..\..\docs\design\Client solution structure.md = ..\..\docs\design\Client solution structure.md
+		..\..\docs\design\definitions.md = ..\..\docs\design\definitions.md
+		..\..\docs\design\DEW IT design.pptx = ..\..\docs\design\DEW IT design.pptx
+		..\..\docs\design\lessons.md = ..\..\docs\design\lessons.md
+		..\..\docs\design\multi-language structure.md = ..\..\docs\design\multi-language structure.md
+		..\..\docs\design\plugins.md = ..\..\docs\design\plugins.md
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "developer", "developer", "{5A558C23-8590-4BC3-A2CF-2312AA5272FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +45,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{069322FD-4710-40D3-A9B4-99EF212977F0} = {F83FC2A3-64ED-4619-AEB6-783BD7F556E2}
+		{5A558C23-8590-4BC3-A2CF-2312AA5272FC} = {F83FC2A3-64ED-4619-AEB6-783BD7F556E2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6094B785-6C1A-493A-8D50-06D2820F376D}

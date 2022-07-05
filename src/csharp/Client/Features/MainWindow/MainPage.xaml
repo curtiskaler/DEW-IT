@@ -1,41 +1,184 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="DewIt.Client.view.main.MainPage">
-			 
-    <ScrollView>
-        <VerticalStackLayout 
-            Spacing="25" 
-            Padding="30,0" 
-            VerticalOptions="Center">
+             x:Class="DewIt.Client.Features.MainWindow.MainPage"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:infra="clr-namespace:DewIt.Client.Infrastructure"
+             xmlns:model="clr-namespace:DewIt.Model.DataTypes;assembly=DewIt.Model"
+             xmlns:dataTemplates="clr-namespace:DewIt.Client.Features.DataTemplates"
+             x:Name="mainPage"
+             >
 
-            <Image
-                Source="dotnet_bot.png"
-                SemanticProperties.Description="Cute dot net bot waving hi to you!"
-                HeightRequest="200"
-                HorizontalOptions="Center" />
-                
-            <Label 
-                Text="Hello, World!"
-                SemanticProperties.HeadingLevel="Level1"
-                FontSize="32"
-                HorizontalOptions="Center" />
-            
-            <Label 
-                Text="Welcome to .NET Multi-platform App UI"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
-                FontSize="18"
-                HorizontalOptions="Center" />
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="BoardBackgroundColor">DimGray</Color>
+            <Color x:Key="BoardTitleFontColor">White</Color>
+            <Color x:Key="FontColor">Black</Color>
+            <Color x:Key="ColumnBackgroundColor">DarkGray</Color>
+            <Color x:Key="ColumnWipReachedBackgroundColor">IndianRed</Color>
+            <x:Double x:Key="BoardTitleSize">20</x:Double>
+            <x:Double x:Key="ColumnTitleSize">18</x:Double>
+            <OnPlatform x:Key="FontAwesomeSolid" x:TypeArguments="x:String">
+                <On Platform="Android" Value="FontAwesomeSolid#Regular" />
+                <On Platform="WinUI, iOS, MacCatalyst" Value="FontAwesomeSolid" />
+            </OnPlatform>
 
-            <Button 
-                x:Name="CounterBtn"
-                Text="Click me"
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Center" />
+            <Color x:Key="IconBackgroundColor">Gray</Color>
+            <Color x:Key="CardBackgroundColor">White</Color>
+            <Color x:Key="BorderColor">Gray</Color>
+            <x:Double x:Key="CardTitleSize">18</x:Double>
+            <x:Double x:Key="CardDescriptionSize">12</x:Double>
 
-        </VerticalStackLayout>
-    </ScrollView>
- 
+            <!--<ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../DataTemplates/CardViewTemplate.xaml" />
+            </ResourceDictionary.MergedDictionaries>-->
+
+        </ResourceDictionary>
+
+
+    </ContentPage.Resources>
+
+    <StackLayout BackgroundColor="{DynamicResource BoardBackgroundColor}">
+        <HorizontalStackLayout>
+            <Label
+                FontSize="{StaticResource BoardTitleSize}"
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand"
+                Text="Test project name"
+                TextColor="{DynamicResource BoardTitleFontColor}" />
+
+            <Button
+                VerticalOptions="Center"
+                BackgroundColor="Transparent"
+                Command="{Binding RefreshCommand}"
+                Text="Refresh" />
+
+            <Button
+                x:Name="ResetButton"
+                HorizontalOptions="EndAndExpand"
+                VerticalOptions="Center"
+                BackgroundColor="Transparent"
+                Clicked="ResetButton_OnClicked"
+                Text="Reset to default" />
+        </HorizontalStackLayout>
+
+        <CarouselView
+            x:Name="Board"
+            IndicatorView="Indicator"
+            EmptyView="No columns to display"
+            ItemsSource="{Binding Lanes}"
+            Position="{Binding Position}"
+            Loop="False"
+            PeekAreaInsets="10">
+            <CarouselView.ItemsLayout>
+                <LinearItemsLayout ItemSpacing="10" Orientation="Horizontal" />
+            </CarouselView.ItemsLayout>
+            <CarouselView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="0" CornerRadius="10">
+                        <Frame.GestureRecognizers>
+                            <DropGestureRecognizer AllowDrop="True"
+                                                   DropCommand="{Binding BindingContext.DropCommand, Source={x:Reference Board}}"
+                                                   DropCommandParameter="{Binding .}" />
+                        </Frame.GestureRecognizers>
+                        <Frame.Triggers>
+                            <DataTrigger
+                                Binding="{Binding IsMaxWIPReached}"
+                                TargetType="Frame"
+                                Value="True">
+                                <Setter Property="BackgroundColor"
+                                        Value="{DynamicResource ColumnWipReachedBackgroundColor}" />
+                            </DataTrigger>
+                            <DataTrigger
+                                Binding="{Binding IsMaxWIPReached}"
+                                TargetType="Frame"
+                                Value="False">
+                                <Setter Property="BackgroundColor" Value="{DynamicResource ColumnBackgroundColor}" />
+                            </DataTrigger>
+                        </Frame.Triggers>
+
+                        <StackLayout Margin="10">
+
+                            <!-- Lane header -->
+                            <HorizontalStackLayout Margin="10">
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="{StaticResource ColumnTitleSize}"
+                                    HorizontalOptions="Start"
+                                    Text="{Binding Lane.DisplayName}"
+                                    VerticalOptions="Center" />
+
+                                <Label
+                                    Margin="20,0"
+                                    FontSize="{StaticResource ColumnTitleSize}"
+                                    HorizontalOptions="CenterAndExpand"
+                                    VerticalOptions="Center">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding Lane.Cards.Count}" />
+                                            <Span>/</Span>
+                                            <Span Text="{Binding Lane.MaxWorkInProgress}" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+
+                                <ImageButton
+                                    Command="{Binding BindingContext.DeleteColumnCommand, Source={x:Reference Board}}"
+                                    CommandParameter="{Binding .}"
+                                    HorizontalOptions="EndAndExpand"
+                                    VerticalOptions="Center">
+                                    <ImageButton.Source>
+                                        <FontImageSource
+                                            FontFamily="{StaticResource FontAwesomeSolid}"
+                                            Glyph="{x:Static infra:IconFont.TrashAlt}"
+                                            Size="{StaticResource ColumnTitleSize}"
+                                            Color="{DynamicResource FontColor}" />
+                                    </ImageButton.Source>
+                                </ImageButton>
+                            </HorizontalStackLayout>
+
+                            <!-- Lane Content -->
+                            <!--ItemsSource="{Binding Lane.Cards}"-->
+                            <CollectionView EmptyView="No cards to display" ItemsSource="{Binding Lane.Cards}">
+                                <CollectionView.ItemTemplate >
+                                    <DataTemplate>
+                                        <dataTemplates:CardView EventAggregator="{Binding BindingContext.EventAggregator, Source={x:Reference Board}}"/>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+
+                                <!--ItemTemplate="{StaticResource cardViewDataTemplate}">-->
+                                <!--<CollectionView.ItemsSource>
+                                    <x:Array Type="{x:Type model:Card}">
+                                        <model:Card DisplayName="Alice" Description="bone1" />
+                                        <model:Card DisplayName="Bob" Description="bone2" />
+                                    </x:Array>
+                                </CollectionView.ItemsSource>-->
+
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout ItemSpacing="5" Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+
+                            </CollectionView>
+                            <Button
+                                Command="{Binding BindingContext.AddCard, Source={x:Reference Board}}"
+                                CommandParameter="{Binding Lane.UUID}"
+                                Text="Add new card" />
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CarouselView.ItemTemplate>
+        </CarouselView>
+
+        <IndicatorView
+            x:Name="Indicator"
+            HorizontalOptions="Center"
+            IndicatorColor="White"
+            SelectedIndicatorColor="Black" />
+
+        <Button
+            BackgroundColor="Transparent"
+            Command="{Binding AddColumn}"
+            Text="Add new column" />
+    </StackLayout>
 </ContentPage>

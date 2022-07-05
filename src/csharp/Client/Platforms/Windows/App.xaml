@@ -3,6 +3,9 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:maui="using:Microsoft.Maui"
-    xmlns:local="using:DewIt.Client">
+    xmlns:local="using:DewIt.WinUI"
+    >
+    <!--xmlns:windows="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.WindowsSpecific;assembly=Microsoft.Maui.Controls"-->
+    <!--windows:Application.ImageDirectory="Assets"-->
 
 </maui:MauiWinUIApplication>

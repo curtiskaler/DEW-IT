@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:infra="clr-namespace:DewIt.Client.Infrastructure">
+
+    <OnPlatform x:Key="FontAwesomeSolid" x:TypeArguments="x:String">
+        <On Platform="Android" Value="FontAwesomeSolid#Regular" />
+        <On Platform="WinUI, iOS, MacCatalyst" Value="FontAwesomeSolid" />
+    </OnPlatform>
+
+    <Color x:Key="IconBackgroundColor">Gray</Color>
+    <Color x:Key="CardBackgroundColor">White</Color>
+    <Color x:Key="BorderColor">Gray</Color>
+    <Color x:Key="FontColor">Black</Color>
+    <x:Double x:Key="CardTitleSize">18</x:Double>
+    <x:Double x:Key="CardDescriptionSize">12</x:Double>
+
+    <DataTemplate x:Key="cardViewDataTemplate">
+        <Frame 
+               BackgroundColor="{DynamicResource CardBackgroundColor}"
+               BorderColor="{DynamicResource BorderColor}"
+               CornerRadius="10"
+               HasShadow="True"
+               Margin="5,0"
+               Padding="8"
+               HorizontalOptions="Center"
+               VerticalOptions="Center">
+            
+            <!--BindingContext="{Binding Source={RelativeSource TemplatedParent}}"-->
+
+            <!--<Frame.GestureRecognizers>
+                <DragGestureRecognizer CanDrag="True"
+                                       DragStartingCommand="{Binding BindingContext.DragStartingCommand, Source={x:Reference Board}}"
+                                       DragStartingCommandParameter="{Binding .}"
+                                       DropCompletedCommand="{Binding BindingContext.DropCompletedCommand, Source={x:Reference Board}}" />
+            </Frame.GestureRecognizers>-->
+
+            <Grid Margin="10">
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="75" />
+                    <ColumnDefinition Width="200" />
+                </Grid.ColumnDefinitions>
+
+                <Frame IsClippedToBounds="True"
+                       BorderColor="{StaticResource BorderColor}"
+                       BackgroundColor="{StaticResource IconBackgroundColor}"
+                       CornerRadius="38"
+                       HeightRequest="60"
+                       WidthRequest="60"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center">
+                    <Image Source="{Binding IconImageSource}"
+                           Margin="-20"
+                           WidthRequest="100"
+                           HeightRequest="100"
+                           Aspect="AspectFill" />
+                </Frame>
+
+                <Label Grid.Column="1"
+                       FontAttributes="Bold"
+                       FontSize="{StaticResource CardTitleSize}"
+                       Text="{Binding DisplayName}" 
+                       TextColor="{StaticResource FontColor}"
+                       VerticalTextAlignment="Center"
+                       HorizontalTextAlignment="Start" />
+
+                <BoxView Grid.Row="1"
+                         Grid.ColumnSpan="2"
+                         BackgroundColor="{StaticResource BorderColor}"
+                         HeightRequest="2"
+                         HorizontalOptions="Fill" />
+
+                <Label Grid.Row="2"
+                       Grid.ColumnSpan="2"
+                       FontSize="{StaticResource CardDescriptionSize}"
+                       Text="{Binding Description}"
+                       TextColor="{StaticResource FontColor}"
+                       VerticalTextAlignment="Start"
+                       VerticalOptions="End"
+                       HorizontalOptions="Fill" />
+
+                <ImageButton
+                    Grid.Row="0"
+                    Grid.RowSpan="2"
+                    Grid.Column="1"
+                    BackgroundColor="{DynamicResource CardBackgroundColor}"
+                    Command="{Binding BindingContext.DeleteCard, Source={x:Reference Board}}"
+                    CommandParameter="{Binding .}"
+                    WidthRequest="{StaticResource CardTitleSize}"
+                    HeightRequest="{StaticResource CardTitleSize}"
+                    HorizontalOptions="EndAndExpand">
+                    <ImageButton.Source>
+                        <FontImageSource
+                            FontFamily="{StaticResource FontAwesomeSolid}"
+                            Glyph="{x:Static infra:IconFont.TrashAlt}"
+                            Size="{StaticResource CardTitleSize}"
+                            Color="{DynamicResource FontColor}" />
+                    </ImageButton.Source>
+                </ImageButton>
+            </Grid>
+        </Frame>
+    </DataTemplate>
+
+</ResourceDictionary>

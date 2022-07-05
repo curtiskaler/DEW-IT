@@ -127,9 +127,9 @@ public class URNTests
 #pragma warning disable NUnit2010 // Use EqualConstraint for better assertion messages in case of failure
             Assert.That(a == (URN)b, Is.False);
             Assert.That(a.GetHashCode(), Is.Not.EqualTo(b?.GetHashCode()));
-            Assert.That((URN)b == a, Is.False);
-            Assert.That(a != (URN)b, Is.True);
-            Assert.That((URN)b != a, Is.True);
+            Assert.That((URN)b! == a, Is.False);
+            Assert.That(a != (URN)b!, Is.True);
+            Assert.That((URN)b! != a, Is.True);
 #pragma warning restore NUnit2010 // Use EqualConstraint for better assertion messages in case of failure
         });
     }

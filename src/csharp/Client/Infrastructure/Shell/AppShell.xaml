@@ -3,7 +3,7 @@
     x:Class="DewIt.Client.infrastructure.shell.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:main="clr-namespace:DewIt.Client.view.main"
+    xmlns:main="clr-namespace:DewIt.Client.Features.MainWindow"
     Shell.FlyoutBehavior="Disabled">
 
     <ShellContent
