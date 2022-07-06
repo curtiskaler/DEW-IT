@@ -698,7 +698,7 @@ public static class IconFont
     public static readonly string Divide = "\uf529";
     public static readonly string DoorClosed = "\uf52a";
     public static readonly string DoorOpen = "\uf52b";
-    public static readonly string Equals = "\uf52c";
+    public new static readonly string Equals = "\uf52c";
     public static readonly string Feather = "\uf52d";
     public static readonly string Frog = "\uf52e";
     public static readonly string GasPump = "\uf52f";

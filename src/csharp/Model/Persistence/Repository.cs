@@ -16,6 +16,8 @@ public interface IRepository<T> where T : new()
 
     Task<List<T>> BulkSave(List<T> items);
     Task<T> SaveItem(T item);
+
+    void Initialize();
 }
 
 public abstract class Repository<T> : IRepository<T> where T : new()
@@ -88,5 +90,10 @@ public abstract class Repository<T> : IRepository<T> where T : new()
     public virtual Task<List<T>> BulkSave(List<T> items)
     {
         throw new NotImplementedException();
+    }
+
+    public void Initialize()
+    {
+        Database.CreateTable<T>();
     }
 }

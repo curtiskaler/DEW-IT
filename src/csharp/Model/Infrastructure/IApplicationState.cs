@@ -1,8 +1,6 @@
-﻿using DewIt.Model.DataTypes;
+﻿namespace DewIt.Model.Infrastructure;
 
-namespace DewIt.Model.Infrastructure;
-
-public interface IApplicationState<out TState> where TState : IApplicationState<TState>
+public interface IApplicationState<TState> where TState: IApplicationState<TState>
 {
-    TState Initialize(IBootstrapper<TState> bootstrapper);
+    TState Initialize();
 }

@@ -14,6 +14,9 @@ public class LanesRepository : Repository<Lane>, ILaneRepository
 
     public override Task<List<Lane>> GetAll()
     {
+        // TODO: The Database call creates the Lanes table, but we need to also create the Cards table.
+        // perhaps an 'ensure initialized' call somewhere?
+
         var lanes = Database.Table<Lane>().ToList();
         var cards = Database.Table<Card>().ToList();
         var result = lanes.GroupJoin(cards, column => column.UUID, card => card.LaneUUID,

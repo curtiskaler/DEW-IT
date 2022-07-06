@@ -9,6 +9,7 @@ using CommunityToolkit.Maui.Core.Extensions;
 
 // TODO: Verify that System.WINDOWS.Input works on MAC
 // if not, then move ICommand and all it's required kibble over to Model
+
 using System.Windows.Input;
 using DewIt.Client.Features.DataTemplates;
 using DewIt.Model.DataTypes;
@@ -26,8 +27,8 @@ public class MainPageViewModel : ObservableObject
     public readonly ICardRepository CardsRepository;
     public readonly ILaneRepository LanesRepository;
 
-    public static readonly BindableProperty EventAggregatorProperty = BindableProperty.Create(nameof(EventAggregator),
-        typeof(IEventAggregator), typeof(CardView));
+    //public static readonly BindableProperty EventAggregatorProperty = BindableProperty.Create(nameof(EventAggregator),
+    //    typeof(IEventAggregator), typeof(CardView));
 
     private IEventAggregator _eventAggregator;
 
@@ -42,11 +43,12 @@ public class MainPageViewModel : ObservableObject
         }
     }
 
-    public MainPageViewModel(ICardRepository cardsRepository, ILaneRepository lanesRepository, IEventAggregator events)
+    public MainPageViewModel(IRepositoryCollection repositoryCollection, IEventAggregator events)
     {
+        if (repositoryCollection == null) throw new ArgumentNullException(nameof(repositoryCollection));
         this.EventAggregator = events;
-        this.CardsRepository = cardsRepository;
-        this.LanesRepository = lanesRepository;
+        this.CardsRepository = repositoryCollection.Cards;
+        this.LanesRepository = repositoryCollection.Lanes;
         RefreshCommand.Execute(null);
 
         EventAggregator.GetEvent<DeleteCardEvent>().Subscribe(async card => await DeleteCard(card));
