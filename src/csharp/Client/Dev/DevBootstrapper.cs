@@ -17,6 +17,17 @@ internal class DevBootstrapper : IBootstrapper<DewItState>
     public void Bootstrap(DewItState state)
     {
         System.Diagnostics.Debug.WriteLine("Dev bootstrapping!");
-        _repositories.Initialize();
+        
+        // initialize the repositories (make sure the repos exist and can be accessed
+        try
+        {
+            _repositories.Initialize();
+        }
+        catch (Exception ex)
+        {
+
+        }
+
+
     }
 }
