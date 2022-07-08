@@ -7,11 +7,13 @@ namespace DewIt.Model.Processing.Results;
 
 public class Skipped : IResult
 {
+    public string Objective { get; }
     public ResultCode Code => ResultCode.SKIP;
     public string Reason { get; }
 
-    public Skipped(string reason)
+    public Skipped(string objective, string reason)
     {
+        Objective = objective;
         Reason = reason;
     }
 
@@ -24,10 +26,10 @@ public class Skipped : IResult
 
 public class Skipped<TOut> : Skipped, IResult<TOut>
 {
-    public TOut Output { get; }
+    public TOut? Output { get; }
 
-    public Skipped(TOut output, string reason) : base(reason)
+    public Skipped(string objective, string reason) : base(objective, reason)
     {
-        Output = output;
+        Output = default;
     }
 }

@@ -26,7 +26,7 @@ public class SubscriptionToken : IEquatable<SubscriptionToken>, IDisposable
     ///<see langword="true"/> if the current object is equal to the <paramref name="other" /> parameter; otherwise, <see langword="false"/>.
     ///</returns>
     ///<param name="other">An object to compare with this object.</param>
-    public bool Equals(SubscriptionToken other)
+    public bool Equals(SubscriptionToken? other)
     {
         if (other == null) return false;
         return Equals(_token, other._token);
@@ -40,7 +40,7 @@ public class SubscriptionToken : IEquatable<SubscriptionToken>, IDisposable
     ///</returns>
     ///<param name="obj">The <see cref="T:System.Object" /> to compare with the current <see cref="T:System.Object" />. </param>
     ///<exception cref="T:System.NullReferenceException">The <paramref name="obj" /> parameter is null.</exception><filterpriority>2</filterpriority>
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(this, obj)) return true;
         return Equals(obj as SubscriptionToken);

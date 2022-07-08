@@ -20,7 +20,10 @@ public static class ProcessResultExtensions
             throw new ArgumentNullException(nameof(multiResult));
 
         var failures = multiResult.GetFailures();
-        return failures.Select(it => it.Reason).ToList();
+        return failures
+            .Select(it =>
+                string.Format(ProcessingStrings.msg_Step_Failed, it.Objective) + Environment.NewLine + it.Reason)
+            .ToList();
     }
 
     public static string GetFirstFailureReason(this IProcessResult multiResult)

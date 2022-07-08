@@ -1,4 +1,5 @@
 ﻿using DewIt.Model.DataTypes;
+using Microsoft.Extensions.Logging;
 
 namespace DewIt.Model.Persistence;
 
@@ -8,7 +9,7 @@ public interface ILaneRepository : IRepository<Lane>
 
 public class LanesRepository : Repository<Lane>, ILaneRepository
 {
-    public LanesRepository(IResource resource) : base(resource)
+    public LanesRepository(ILogger logger, IResource resource) : base(logger, resource)
     {
     }
 

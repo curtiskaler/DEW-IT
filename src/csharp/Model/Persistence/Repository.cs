@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using Microsoft.Extensions.Logging;
+using SQLite;
 
 namespace DewIt.Model.Persistence;
 
@@ -23,6 +24,7 @@ public interface IRepository<T> where T : new()
 public abstract class Repository<T> : IRepository<T> where T : new()
 {
     private readonly Lazy<SQLiteConnection> _databaseConnectionHolder;
+    protected readonly ILogger _logger;
 
     protected SQLiteConnection Database
     {
@@ -34,8 +36,9 @@ public abstract class Repository<T> : IRepository<T> where T : new()
         }
     }
 
-    protected Repository(IResource resource)
+    protected Repository(ILogger logger, IResource resource)
     {
+        _logger = logger;
         var dbPath = resource.GetPath();
         _databaseConnectionHolder = new Lazy<SQLiteConnection>(
             () => new SQLiteConnection(dbPath,

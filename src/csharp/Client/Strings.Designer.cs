@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DewIt.Model.Processing {
+namespace DewIt.Client {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace DewIt.Model.Processing {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ProcessingStrings {
+    internal class Strings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ProcessingStrings() {
+        internal Strings() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace DewIt.Model.Processing {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DewIt.Model.Processing.ProcessingStrings", typeof(ProcessingStrings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DewIt.Client.Strings", typeof(Strings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,83 +61,38 @@ namespace DewIt.Model.Processing {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot create a failure object without a reason or at least one exception..
+        ///   Looks up a localized string similar to Bootstrapping repositories....
         /// </summary>
-        internal static string ERROR_CannotCreateFailureWithoutReasonOrException {
+        internal static string BootstrappingRepositories {
             get {
-                return ResourceManager.GetString("ERROR_CannotCreateFailureWithoutReasonOrException", resourceCulture);
+                return ResourceManager.GetString("BootstrappingRepositories", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Step is null..
+        ///   Looks up a localized string similar to Bootstrap repositories.
         /// </summary>
-        internal static string ERROR_NullStep {
+        internal static string BootstrapRepositories {
             get {
-                return ResourceManager.GetString("ERROR_NullStep", resourceCulture);
+                return ResourceManager.GetString("BootstrapRepositories", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Step not found: {0}.
+        ///   Looks up a localized string similar to Could not initialize repositories..
         /// </summary>
-        internal static string ERROR_Step_not_found {
+        internal static string ERROR_CouldNotInitRepos {
             get {
-                return ResourceManager.GetString("ERROR_Step_not_found", resourceCulture);
+                return ResourceManager.GetString("ERROR_CouldNotInitRepos", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multiple steps with same UUID: [{0}].
+        ///   Looks up a localized string similar to Finished..
         /// </summary>
-        internal static string ERROR_Steps_not_unique {
+        internal static string Finished {
             get {
-                return ResourceManager.GetString("ERROR_Steps_not_unique", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0}: Validate and Cleanup.
-        /// </summary>
-        internal static string fmt_ValidateAndCleanup {
-            get {
-                return ResourceManager.GetString("fmt_ValidateAndCleanup", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Step failed: {0}.
-        /// </summary>
-        internal static string msg_Step_Failed {
-            get {
-                return ResourceManager.GetString("msg_Step_Failed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Step {0} of {1}.
-        /// </summary>
-        internal static string msg_StepIndex {
-            get {
-                return ResourceManager.GetString("msg_StepIndex", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Validating steps.
-        /// </summary>
-        internal static string msg_Validating_Steps {
-            get {
-                return ResourceManager.GetString("msg_Validating Steps", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Step is not necessary..
-        /// </summary>
-        internal static string REASON_Step_not_Necessary {
-            get {
-                return ResourceManager.GetString("REASON_Step_not_Necessary", resourceCulture);
+                return ResourceManager.GetString("Finished", resourceCulture);
             }
         }
     }

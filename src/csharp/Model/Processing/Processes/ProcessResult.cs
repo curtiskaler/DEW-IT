@@ -4,7 +4,7 @@ namespace DewIt.Model.Processing.Processes;
 
 public class ProcessResult : IProcessResult
 {
-    public List<StepAndResult> StepsAndResults { get; protected set; }
+    public IStepAndResultCollection StepsAndResults { get; }
 
     public ProcessResult() : this(new List<StepAndResult>())
     {
@@ -12,7 +12,7 @@ public class ProcessResult : IProcessResult
 
     public ProcessResult(IEnumerable<StepAndResult> stepsAndResults)
     {
-        StepsAndResults = stepsAndResults.ToList();
+        StepsAndResults = new StepAndResultCollection(stepsAndResults);
     }
 
     public ResultCode Code

@@ -6,6 +6,7 @@
 using System.Runtime.InteropServices;
 using DewIt.Model.Processing.EventArgs;
 using DewIt.Model.Processing.Results;
+using Microsoft.Extensions.Logging;
 
 namespace DewIt.Model.Processing.Processes;
 
@@ -13,6 +14,14 @@ namespace DewIt.Model.Processing.Processes;
 
 public abstract class ProcessEvents
 {
+    private readonly ILogger _logger;
+
+    protected ProcessEvents(ILogger logger)
+    {
+        _logger = logger;
+    }
+
+
     public event EventHandler? ProcessStarting;
     public event EventHandler? ProcessComplete;
 

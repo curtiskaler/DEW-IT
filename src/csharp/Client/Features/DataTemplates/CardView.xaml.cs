@@ -24,7 +24,7 @@ public partial class CardView
 
     
     private ICommand _deleteButtonCommand;
-
+    
     public ICommand DeleteButtonCommand
     {
         get => _deleteButtonCommand ??= DeleteCard;
@@ -40,7 +40,6 @@ public partial class CardView
 
     private void OnCardDeleteClicked(Card card)
     {
-        System.Diagnostics.Debug.WriteLine("Delete Card clicked.");
         EventAggregator?.GetEvent<DeleteCardEvent>().Publish(card);
     }
 }

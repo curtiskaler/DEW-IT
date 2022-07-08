@@ -117,31 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ERROR_CannotCreateFailureWithoutReasonOrException" xml:space="preserve">
-    <value>Cannot create a failure object without a reason or at least one exception.</value>
+  <data name="BootstrappingRepositories" xml:space="preserve">
+    <value>Bootstrapping repositories...</value>
   </data>
-  <data name="ERROR_NullStep" xml:space="preserve">
-    <value>Step is null.</value>
+  <data name="BootstrapRepositories" xml:space="preserve">
+    <value>Bootstrap repositories</value>
   </data>
-  <data name="ERROR_Steps_not_unique" xml:space="preserve">
-    <value>Multiple steps with same UUID: [{0}]</value>
+  <data name="ERROR_CouldNotInitRepos" xml:space="preserve">
+    <value>Could not initialize repositories.</value>
   </data>
-  <data name="ERROR_Step_not_found" xml:space="preserve">
-    <value>Step not found: {0}</value>
-  </data>
-  <data name="fmt_ValidateAndCleanup" xml:space="preserve">
-    <value>{0}: Validate and Cleanup</value>
-  </data>
-  <data name="msg_StepIndex" xml:space="preserve">
-    <value>Step {0} of {1}</value>
-  </data>
-  <data name="msg_Step_Failed" xml:space="preserve">
-    <value>Step failed: {0}</value>
-  </data>
-  <data name="msg_Validating Steps" xml:space="preserve">
-    <value>Validating steps</value>
-  </data>
-  <data name="REASON_Step_not_Necessary" xml:space="preserve">
-    <value>Step is not necessary.</value>
+  <data name="Finished" xml:space="preserve">
+    <value>Finished.</value>
   </data>
 </root>

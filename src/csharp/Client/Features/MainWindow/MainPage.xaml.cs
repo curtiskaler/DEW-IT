@@ -10,13 +10,12 @@ public partial class MainPage
 {
     private readonly IResource dataSource;
 
-    public MainPage(MainPageViewModel viewModel, IResource database)
+    public MainPage(MainPageViewModel viewModel, IResource dataSource)
 	{
-        System.Diagnostics.Debug.WriteLine("MainPage!");
         InitializeComponent();
         BindingContext = viewModel;
         ResetButton ??= new Button();
-        this.dataSource = database;
+        this.dataSource = dataSource;
     }
 
     private async void ResetButton_OnClicked(object sender, EventArgs e)

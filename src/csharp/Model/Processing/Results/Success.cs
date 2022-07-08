@@ -8,15 +8,17 @@ namespace DewIt.Model.Processing.Results;
 
 public class Success : IResult
 {
+    public string Objective { get; }
     public ResultCode Code => ResultCode.SUCCESS;
     public string Message { get; }
 
-    public Success() : this("")
+    public Success(string objective) : this(objective, "")
     {
     }
 
-    public Success(string message)
+    public Success(string objective, string message)
     {
+        Objective = objective;
         Message = message;
     }
 
@@ -31,11 +33,11 @@ public class Success<TOut> : Success, IResult<TOut>
 {
     public TOut Output { get; }
 
-    public Success(TOut output) : this(output, "")
+    public Success(string objective, TOut output) : this(objective, output, "")
     {
     }
 
-    public Success(TOut output, string message) : base(message)
+    public Success(string objective, TOut output, string message) : base(objective, message)
     {
         Output = output;
     }

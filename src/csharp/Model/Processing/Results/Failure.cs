@@ -8,41 +8,32 @@ namespace DewIt.Model.Processing.Results;
 
 public class Failure : IResult
 {
+    public string Objective { get; }
     public ResultCode Code => ResultCode.FAILURE;
     public string Reason { get; }
     public List<Exception> Exceptions { get; }
-    public FailureAction Severity { get; }
-
-
-    public Failure(Exception ex) : this(null, ex.ToList(), FailureAction.STOP)
+    
+    public Failure(string objective, Exception ex) 
+        : this(objective, null, ex.ToList())
     {
     }
 
-    public Failure(Exception ex, FailureAction severity) : this(null, ex.ToList(), severity)
+    public Failure(string objective, string reason, Exception ex) 
+        : this(objective, reason, ex.ToList())
     {
     }
-
-    public Failure(List<Exception> exceptions, FailureAction severity) : this(null, exceptions, severity)
+    
+    public Failure(string objective, string? reason, IEnumerable<Exception> exceptions)
     {
-    }
-
-    public Failure(string reason, Exception ex) : this(reason, ex.ToList(), FailureAction.STOP)
-    {
-    }
-
-    public Failure(string reason, List<Exception> exceptions) : this(reason, exceptions, FailureAction.STOP)
-    {
-    }
-
-    public Failure(string reason, Exception ex, FailureAction severity) : this(reason, ex.ToList(), severity)
-    {
-    }
-
-    public Failure(string? reason, List<Exception> exceptions, FailureAction severity)
-    {
-        Exceptions = exceptions;
-        Reason = reason ?? "";
-        Severity = severity;
+        var exceptionsList = exceptions.ToList();
+        if (reason == null && !exceptionsList.Any())
+        {
+            throw new ArgumentException(ProcessingStrings.ERROR_CannotCreateFailureWithoutReasonOrException);
+        }
+        
+        Objective = objective;
+        Exceptions = exceptionsList;
+        Reason = reason ?? exceptionsList.First().Message;
     }
 
     public static implicit operator bool(Failure result)
@@ -54,38 +45,29 @@ public class Failure : IResult
 
 public class Failure<TOut> : Failure, IResult<TOut>
 {
-    public Failure(TOut output, Exception ex, FailureAction severity) : this(output, null, ex.ToList(), severity)
+    public TOut? Output { get; }
+
+    public Failure(string objective, string reason, Exception ex) 
+        : this(objective, default, reason, ex.ToList())
     {
     }
 
-    public Failure(TOut output, List<Exception> exceptions, FailureAction severity) : this(output, null, exceptions,
-        severity)
+    public Failure(string objective, string reason, IEnumerable<Exception> exceptions) 
+        : this(objective, default, reason, exceptions)
     {
     }
 
-    public Failure(TOut output, string reason, Exception ex) : this(output, reason, ex.ToList())
+    public Failure(string objective, TOut? output, string reason, Exception ex) 
+        : this(objective, output, reason, ex.ToList())
     {
     }
 
-    public Failure(TOut output, string reason, List<Exception> exceptions) : this(output, reason, exceptions,
-        FailureAction.STOP)
+
+    public Failure(string objective, TOut? output, string? reason, IEnumerable<Exception> exceptions) 
+        : base(objective, reason, exceptions)
     {
+        Output = output ?? default;
     }
-
-    public Failure(TOut output, string reason, Exception ex, FailureAction severity) : this(output, reason, ex.ToList(),
-        severity)
-    {
-    }
-
-    public Failure(TOut output, string? reason, List<Exception> exceptions, FailureAction severity) : base(reason,
-        exceptions,
-        severity)
-    {
-        Output = output;
-    }
-
-
-    public TOut Output { get; }
 
     public static implicit operator bool(Failure<TOut> d) => d.Code != ResultCode.FAILURE;
 }

@@ -21,17 +21,16 @@ namespace DewIt.Model.DataTypes
 
         public DewItState Initialize()
         {
-            System.Diagnostics.Debug.WriteLine("DewItState: Initializing State!");
-
             try
             {
-                this._bootstrapper.Bootstrap(this);
-                this.Status = LifeCycleState.CREATED;
+                _bootstrapper.Bootstrap(this);
+                Status = LifeCycleState.CREATED;
             }
             catch (Exception ex)
             {
                 // Log the error and clean-up
                 Debug.WriteLine(ex);
+                Environment.Exit(1);
             }
 
             return this;

@@ -1,4 +1,6 @@
 ﻿using DewIt.Model.Processing.Processes;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace DewIt.Model.Processing;
 
@@ -6,6 +8,18 @@ namespace DewIt.Model.Processing;
 
 public sealed class Processor : ProcessEvents, IProcessor
 {
+    private bool _silent;
+
+    public Processor() : this(NullLogger.Instance, true)
+    {
+    }
+
+    public Processor(ILogger logger, bool silent = false) : base(logger)
+    {
+        _silent = silent;
+    }
+
+
     public IProcessResult RunSteps(IEnumerable<IProcessStep> steps)
     {
         var process = new Process(steps);

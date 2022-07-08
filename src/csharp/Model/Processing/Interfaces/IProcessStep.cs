@@ -2,6 +2,9 @@
 
 public interface IProcessStep 
 {
+    /// <summary> A unique string identifier for use in identifying this step. </summary>
+    Guid UUID { get; }
+
     /// <summary> A short text description of what this step does. </summary>
     string Title { get; }
 
@@ -18,5 +21,5 @@ public interface IProcessStep
     IResult ValidateAndCleanup();
 
     /// <summary> Execute the step. </summary>
-    IResult Execute();
+    IResult Execute(IStepAndResultCollection previousSteps);
 }

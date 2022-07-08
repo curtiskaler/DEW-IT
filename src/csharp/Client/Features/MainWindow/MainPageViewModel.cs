@@ -15,6 +15,7 @@ using DewIt.Client.Features.DataTemplates;
 using DewIt.Model.DataTypes;
 using DewIt.Model.Events;
 using DewIt.Model.Persistence;
+using Microsoft.Extensions.Logging;
 using Font = Microsoft.Maui.Font;
 
 namespace DewIt.Client.Features.MainWindow;
@@ -31,6 +32,7 @@ public class MainPageViewModel : ObservableObject
     //    typeof(IEventAggregator), typeof(CardView));
 
     private IEventAggregator _eventAggregator;
+    private readonly ILogger _logger;
 
     public IEventAggregator EventAggregator
     {
@@ -43,12 +45,13 @@ public class MainPageViewModel : ObservableObject
         }
     }
 
-    public MainPageViewModel(IRepositoryCollection repositoryCollection, IEventAggregator events)
+    public MainPageViewModel(ILogger logger, IRepositoryCollection repositoryCollection, IEventAggregator events)
     {
         if (repositoryCollection == null) throw new ArgumentNullException(nameof(repositoryCollection));
-        this.EventAggregator = events;
-        this.CardsRepository = repositoryCollection.Cards;
-        this.LanesRepository = repositoryCollection.Lanes;
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        EventAggregator = events;
+        CardsRepository = repositoryCollection.Cards;
+        LanesRepository = repositoryCollection.Lanes;
         RefreshCommand.Execute(null);
 
         EventAggregator.GetEvent<DeleteCardEvent>().Subscribe(async card => await DeleteCard(card));

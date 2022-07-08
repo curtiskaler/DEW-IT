@@ -1,8 +1,12 @@
 ﻿using DewIt.Model.Processing.Results;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace DewIt.Model.Processing.Processes;
 
-public sealed class Process: ProcessEvents
+// TODO: make previous step results available to next step, to prevent forcing rework
+
+public sealed class Process : ProcessEvents
 {
     private readonly List<IProcessStep> _steps;
     private readonly IProcessResultFactory _processResultFactory;
@@ -18,18 +22,43 @@ public sealed class Process: ProcessEvents
         IProcessResultFactory processResultFactory,
         IStepAndResultFactory stepAndResultFactory,
         IResultFactory resultFactory)
+        : this(steps, processResultFactory, stepAndResultFactory, resultFactory, NullLogger.Instance)
+    {
+    }
+
+    public Process(IEnumerable<IProcessStep> steps,
+        IProcessResultFactory processResultFactory,
+        IStepAndResultFactory stepAndResultFactory,
+        IResultFactory resultFactory,
+        ILogger logger
+    ) : base(logger)
     {
         _steps = steps.ToList();
         _stepAndResultFactory = stepAndResultFactory;
         _processResultFactory = processResultFactory;
         _resultFactory = resultFactory;
     }
-
-
+    
     public IResult ValidateSteps()
     {
-        // do some validation around 
-        return this._resultFactory.SUCCESS();
+        var objective = ProcessingStrings.msg_Validating_Steps;
+
+        // ensure all step UUIDs are unique
+        var duplicates = _steps.GroupBy(it => it.UUID)
+            .Where(g => g.Count() > 1)
+            .Select(it => it.Key.ToString())
+            .ToList();
+
+
+        if (duplicates.Any())
+        {
+            var dupString = string.Join(", ", duplicates);
+            var reason = string.Format(ProcessingStrings.ERROR_Steps_not_unique, dupString);
+            var ex = new InvalidOperationException(reason);
+            return _resultFactory.FAILURE(objective, reason, ex);
+        }
+
+        return _resultFactory.SUCCESS(objective);
     }
 
     public ProcessResult Execute()
@@ -48,14 +77,14 @@ public sealed class Process: ProcessEvents
             var necessary = step.IsNecessary();
             if (!necessary)
             {
-                var skipped = _resultFactory.SKIP(ProcessingStrings.REASON_Step_not_Necessary);
+                var skipped = _resultFactory.SKIP(step.Title, ProcessingStrings.REASON_Step_not_Necessary);
                 OnStepSkipped(step, skipped, stepNumber, total);
                 continue;
             }
 
             OnStepStarting(step, stepNumber, total);
 
-            var execution = ExecuteStep(stepNumber, total, step);
+            var execution = ExecuteStep(stepNumber, total, step, processResult.StepsAndResults);
             if (execution.IsFailure())
             {
                 var stepAndResult = _stepAndResultFactory.Create(step, execution);
@@ -82,7 +111,7 @@ public sealed class Process: ProcessEvents
         return processResult;
     }
 
-    protected IResult ValidateAndCleanupStep(int stepNumber, int count, IProcessStep step)
+    private IResult ValidateAndCleanupStep(int stepNumber, int count, IProcessStep step)
     {
         OnStepValidationStarting(step, stepNumber, count);
         try
@@ -105,18 +134,18 @@ public sealed class Process: ProcessEvents
         }
         catch (Exception ex)
         {
-            var result =_resultFactory.FAILURE(ex.Message, ex, step.PostExecutionValidationFailureAction);
+            var result = _resultFactory.FAILURE(step.Title, ex.Message, ex);
             OnStepValidationFailed(step, result, stepNumber, count);
             return result;
         }
     }
 
-    protected IResult ExecuteStep(int stepNumber, int count, IProcessStep step)
+    private IResult ExecuteStep(int stepNumber, int count, IProcessStep step, IStepAndResultCollection previousSteps)
     {
         OnStepExecutionStarting(step, stepNumber, count);
         try
         {
-            var execution = step.Execute();
+            var execution = step.Execute(previousSteps);
             if (execution.IsSkipped())
             {
                 OnStepExecutionSkipped(step, (execution as Skipped)!, stepNumber, count);
@@ -134,7 +163,7 @@ public sealed class Process: ProcessEvents
         }
         catch (Exception ex)
         {
-            var result =_resultFactory.FAILURE(ex.Message, ex, step.ExecutionFailureAction);
+            var result = _resultFactory.FAILURE(step.Title, ex.Message, ex);
             OnStepFailed(step, result, stepNumber, count);
             return result;
         }
