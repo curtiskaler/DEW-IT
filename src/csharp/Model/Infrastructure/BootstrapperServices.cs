@@ -2,16 +2,16 @@
 
 namespace DewIt.Model.Infrastructure;
 
-public interface IBootstrapData
+public interface IBootstrapperServices
 {
     IRepositoryCollection Repositories { get; }
 }
 
-public class BootstrapData : IBootstrapData
+public class BootstrapperServices : IBootstrapperServices
 {
     public IRepositoryCollection Repositories { get; }
 
-    public BootstrapData(IRepositoryCollection repositories)
+    public BootstrapperServices(IRepositoryCollection repositories)
     {
         Repositories = repositories;
     }

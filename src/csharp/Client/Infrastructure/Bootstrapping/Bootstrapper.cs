@@ -8,30 +8,27 @@ namespace DewIt.Client.Infrastructure.Bootstrapping;
 internal class Bootstrapper : IBootstrapper<DewItState>
 {
     private readonly ILogger _logger;
-    private readonly IBootstrapData _bootstrapData;
+    private readonly IProcessor _processor;
+    private readonly IBootstrapperServices _services;
 
-    public Bootstrapper(ILogger logger, IBootstrapData bootstrapData)
+    public Bootstrapper(ILogger logger, IProcessor processor, IBootstrapperServices services)
     {
         _logger = logger;
-        _bootstrapData = bootstrapData ?? throw new ArgumentNullException(nameof(bootstrapData));
+        _processor = processor;
+        _services = services ?? throw new ArgumentNullException(nameof(services));
     }
     
-    public void Bootstrap(DewItState state)
+    public DewItState Bootstrap()
     {
         _logger.Log(LogLevel.Information, "Bootstrapping!");
         
         // set up a list of things to do, and then process it
         var processSteps = SetupBootstrapProcessSteps();
-        var result = new Processor().RunSteps(processSteps);
-        if (!result.Failed) return;
+        var result = _processor.RunSteps(processSteps);
+        DieIfBootstrappingFailed(result);
 
-        // log out the reasons for failure
-        var reasons = result.GetFailureReasons();
-        _logger.Log(LogLevel.Error, "FAILED BOOTSTRAPPING:");
-        reasons.ForEach(it => _logger.Log(LogLevel.Error, it));
-
-        // Failure to bootstrap is deadly: exit the app!
-        Environment.Exit(1);
+        var config = ResolveConfig(result.StepsAndResults);
+        return config;
     }
 
     private IEnumerable<IProcessStep> SetupBootstrapProcessSteps()
@@ -41,17 +38,39 @@ internal class Bootstrapper : IBootstrapper<DewItState>
         // TODO: setup performance marking
         // TODO: setup crash reporter
         // TODO: setup i18n
+
         
-        IProcessStep initializeRepositories = new InitializeRepositoriesStep(_logger, _bootstrapData);
-        
+        var steps = new List<IProcessStep>
+        {
+            new LoadConfigFileStep(_logger, _services),
+            new InitializeRepositoriesStep(_logger, _services),
+        };
 
         // TODO: find additional bootstrapping steps from plugins
 
-        var steps = new List<IProcessStep>
-        {
-            initializeRepositories,
-        };
 
         return steps;
+    }
+
+    private void DieIfBootstrappingFailed(IProcessResult result)
+    {
+        if (!result.Failed) return;
+
+        // log out the reasons for failure
+        var reasons = result.GetFailureReasons();
+
+        _logger.Log(LogLevel.Error, "FAILED BOOTSTRAPPING:");
+        reasons.ForEach(it => _logger.Log(LogLevel.Error, it, Array.Empty<object>()));
+
+        // Failure to bootstrap is deadly: exit the app!
+        Environment.Exit(1);
+    }
+
+    private static DewItState ResolveConfig(IStepAndResultCollection stepsAndResults)
+    {
+        // TODO: Iterate over the process results and build the application state.
+        
+
+        return new DewItState();
     }
 }

@@ -1,6 +1,5 @@
 ﻿namespace DewIt.Model.Infrastructure;
 
-public interface IApplicationState<TState> where TState: IApplicationState<TState>
+public interface IApplicationState<out TState> where TState: IApplicationState<TState>
 {
-    TState Initialize();
 }

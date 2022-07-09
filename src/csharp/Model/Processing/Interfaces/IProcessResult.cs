@@ -8,4 +8,9 @@
         IStepAndResultCollection StepsAndResults { get; }
         bool Succeeded { get; }
     }
+
+    public interface IProcessResult<out T> : IProcessResult
+    {
+        T Object { get; }
+    }
 }

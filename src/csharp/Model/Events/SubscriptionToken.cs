@@ -1,14 +1,16 @@
-﻿namespace DewIt.Model.Events;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace DewIt.Model.Events;
 
 /// <summary>
 /// Subscription token returned from <see cref="EventBase"/> on subscribe.
 /// </summary>
-[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly",
+[SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly",
     Justification = "Should never have a need for a finalizer, hence no need for Dispose(bool)")]
 public class SubscriptionToken : IEquatable<SubscriptionToken>, IDisposable
 {
     private readonly Guid _token;
-    private Action<SubscriptionToken> _unsubscribeAction;
+    private Action<SubscriptionToken>? _unsubscribeAction;
 
     /// <summary>
     /// Initializes a new instance of <see cref="SubscriptionToken"/>.
@@ -61,7 +63,7 @@ public class SubscriptionToken : IEquatable<SubscriptionToken>, IDisposable
     /// <summary>
     /// Disposes the SubscriptionToken, removing the subscription from the corresponding <see cref="EventBase"/>.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly",
+    [SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly",
         Justification = "Should never have need for a finalizer, hence no need for Dispose(bool).")]
     public virtual void Dispose()
     {

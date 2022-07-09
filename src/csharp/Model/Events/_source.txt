@@ -1,0 +1,3 @@
+﻿The 'events' code here is taken from the Prism framework (MIT License)
+
+https://github.com/PrismLibrary/Prism/tree/master/src/Prism.Core/Events

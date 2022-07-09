@@ -1,6 +1,6 @@
 ﻿namespace DewIt.Model.Processing;
 
-public interface IProcessStep 
+public interface IProcessStep
 {
     /// <summary> A unique string identifier for use in identifying this step. </summary>
     Guid UUID { get; }
@@ -19,7 +19,7 @@ public interface IProcessStep
 
     /// <summary> Verify that everything got done correctly, and do any cleanup. </summary>
     IResult ValidateAndCleanup();
-
+    
     /// <summary> Execute the step. </summary>
-    IResult Execute(IStepAndResultCollection previousSteps);
+    IResult Execute(IProcessResult processResult);
 }

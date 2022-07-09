@@ -1,9 +1,22 @@
-﻿namespace DewIt.Model.Processing.Processes;
+﻿using System.Runtime.InteropServices;
 
-public class ProcessResultFactory: IProcessResultFactory
+namespace DewIt.Model.Processing.Processes;
+
+public static class ProcessResultFactory
 {
-    public ProcessResult Create()
+    public static ProcessResult Create()
     {
         return new ProcessResult();
+    }
+
+    public static ProcessResult<TOut> Create<TOut>([Optional] TOut? initialObject) where TOut : new()
+    {
+        var result = new ProcessResult<TOut>();
+        if (initialObject != null)
+        {
+            result.Object = initialObject;
+        }
+
+        return result;
     }
 }

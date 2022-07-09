@@ -129,6 +129,12 @@
   <data name="ERROR_Step_not_found" xml:space="preserve">
     <value>Step not found: {0}</value>
   </data>
+  <data name="ExecutingStep" xml:space="preserve">
+    <value>Executing Step: {0}</value>
+  </data>
+  <data name="Finished" xml:space="preserve">
+    <value>Finished.</value>
+  </data>
   <data name="fmt_ValidateAndCleanup" xml:space="preserve">
     <value>{0}: Validate and Cleanup</value>
   </data>

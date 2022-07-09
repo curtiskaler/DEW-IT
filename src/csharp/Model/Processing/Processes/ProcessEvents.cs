@@ -12,9 +12,9 @@ namespace DewIt.Model.Processing.Processes;
 
 // TODO: disposable?
 
-public abstract class ProcessEvents
+public abstract class ProcessEvents : IProcessEvents
 {
-    private readonly ILogger _logger;
+    protected readonly ILogger _logger;
 
     protected ProcessEvents(ILogger logger)
     {

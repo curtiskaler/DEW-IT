@@ -86,14 +86,5 @@ namespace DewIt.Client {
                 return ResourceManager.GetString("ERROR_CouldNotInitRepos", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Finished..
-        /// </summary>
-        internal static string Finished {
-            get {
-                return ResourceManager.GetString("Finished", resourceCulture);
-            }
-        }
     }
 }

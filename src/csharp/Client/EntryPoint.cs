@@ -6,7 +6,9 @@ using DewIt.Model.DataTypes;
 using DewIt.Model.Events;
 using DewIt.Model.Infrastructure;
 using DewIt.Model.Persistence;
+using DewIt.Model.Processing;
 using Microsoft.Extensions.Logging;
+using Exception = System.Exception;
 using MainPage = DewIt.Client.Features.MainWindow.MainPage;
 
 
@@ -32,7 +34,14 @@ public static class EntryPoint
 
         System.Diagnostics.Debug.WriteLine("Object graph created. Leaving EntryPoint!");
 
-        return builder.Build();
+        // pre-build the app
+        var app = builder.Build();
+
+        // Intercept and register the ServiceProvider
+        app.Services.UseResolver();
+
+        // return the app as usual;
+        return app;
     }
 }
 
@@ -42,9 +51,11 @@ internal static class DewItObjectGraphExtensions
     {
         builder.ConfigureFonts(fonts =>
         {
+            // ReSharper disable StringLiteralTypo
             fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
             fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             fonts.AddFont("FontAwesome5Solid.otf", "FontAwesomeSolid");
+            // ReSharper restore StringLiteralTypo
         });
         return builder;
     }
@@ -59,8 +70,9 @@ internal static class DewItObjectGraphExtensions
 
     public static MauiAppBuilder RegisterServices(this MauiAppBuilder builder)
     {
+        // TODO: Un-dev-ify the bootstrapper
         // dev resources : TODO: update to prod
-        builder.Services.AddSingleton<IResource>(sp => new DBResource());
+        builder.Services.AddSingleton<IResource>(new DBResource());
         builder.Services.AddSingleton<ILaneRepository>(sp =>
             new LanesRepository(
                 sp.GetRequiredService<ILogger<LanesRepository>>(),
@@ -70,39 +82,44 @@ internal static class DewItObjectGraphExtensions
                 sp.GetRequiredService<ILogger<CardsRepository>>(),
                 sp.GetRequiredService<IResource>()));
 
-        // prod resources
         builder.Services.AddSingleton<IRepositoryCollection>(sp =>
             new RepositoryCollection(
                 sp.GetRequiredService<ILogger<RepositoryCollection>>(),
                 sp.GetRequiredService<ILaneRepository>(),
                 sp.GetRequiredService<ICardRepository>()));
 
-        builder.Services.AddSingleton<IBootstrapData>(sp =>
-            new BootstrapData(sp.GetRequiredService<IRepositoryCollection>()));
+
+        builder.Services.AddSingleton<IBootstrapperServices>(sp =>
+            new BootstrapperServices(sp.GetRequiredService<IRepositoryCollection>()));
+
+
+        // prod resources
+        builder.Services.AddSingleton<IProcessor>(
+            sp => new Processor(sp.GetRequiredService<ILogger<IProcessor>>())
+        );
 
         builder.Services.AddSingleton<IBootstrapper<DewItState>>(sp =>
             new Bootstrapper(
                 sp.GetRequiredService<ILogger<IBootstrapper<DewItState>>>(),
-                sp.GetRequiredService<IBootstrapData>()));
+                sp.GetRequiredService<IProcessor>(),
+                sp.GetRequiredService<IBootstrapperServices>())
+        );
 
-        builder.Services.AddSingleton(sp =>
-            new DewItState(sp.GetRequiredService<IBootstrapper<DewItState>>()));
-
-        builder.Services.AddSingleton<IEventAggregator>(sp =>
-            new EventAggregator());
+        builder.Services.AddSingleton<IEventAggregator>(
+            new EventAggregator()
+        );
 
         builder.Services.AddSingleton(sp =>
             new MainPageViewModel(
                 sp.GetRequiredService<ILogger<MainPageViewModel>>(),
                 sp.GetRequiredService<IRepositoryCollection>(),
-                sp.GetRequiredService<IEventAggregator>()));
+                sp.GetRequiredService<IEventAggregator>())
+        );
 
         builder.Services.AddSingleton(sp =>
             new MainPage(sp.GetRequiredService<MainPageViewModel>(),
-                sp.GetRequiredService<IResource>()));
-
-        // TODO: Un-dev-ify the bootstrapper
-
+                sp.GetRequiredService<IResource>())
+        );
 
         return builder;
 
@@ -129,5 +146,50 @@ internal static class DewItObjectGraphExtensions
         //    //handlers.AddHandler(typeof(MyEntry), typeof(MyEntryHandler));
         //});
         return builder;
+    }
+
+    
+}
+
+[Obsolete("Don't use this. Bypassing DI is a code smell.")]
+public static class Resolver
+{
+    /* Don't use this. Bypassing DI is a code smell. */
+    
+    /** How to use:
+     *  At the bottom of CreateMauiApp(), do the following:
+     * 
+     *      // pre-build the app
+     *      var app = builder.Build();
+     * 
+     *      // Intercept and register the ServiceProvider
+     *      app.Services.UseResolver();
+     *
+     *      // return the app as usual;
+     *      return app;
+     */
+
+    private static IServiceProvider _serviceProvider;
+
+    public static IServiceProvider ServiceProvider =>
+        _serviceProvider ?? throw new Exception("Service provider has not been initialized");
+
+    /// <summary>
+    /// Register the service provider
+    /// </summary>
+    public static void RegisterServiceProvider(IServiceProvider sp)
+    {
+        _serviceProvider = sp;
+    }
+
+    /// <summary>
+    /// Get service of type <typeparamref name="T"/> from the service provider.
+    /// </summary>
+    public static T Resolve<T>() where T : class
+        => ServiceProvider.GetRequiredService<T>();
+
+    public static void UseResolver(this IServiceProvider sp)
+    {
+        RegisterServiceProvider(sp);
     }
 }

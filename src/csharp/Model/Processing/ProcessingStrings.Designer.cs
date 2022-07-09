@@ -22,7 +22,7 @@ namespace DewIt.Model.Processing {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ProcessingStrings {
+    public class ProcessingStrings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace DewIt.Model.Processing {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DewIt.Model.Processing.ProcessingStrings", typeof(ProcessingStrings).Assembly);
@@ -51,7 +51,7 @@ namespace DewIt.Model.Processing {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace DewIt.Model.Processing {
         /// <summary>
         ///   Looks up a localized string similar to Cannot create a failure object without a reason or at least one exception..
         /// </summary>
-        internal static string ERROR_CannotCreateFailureWithoutReasonOrException {
+        public static string ERROR_CannotCreateFailureWithoutReasonOrException {
             get {
                 return ResourceManager.GetString("ERROR_CannotCreateFailureWithoutReasonOrException", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace DewIt.Model.Processing {
         /// <summary>
         ///   Looks up a localized string similar to Step is null..
         /// </summary>
-        internal static string ERROR_NullStep {
+        public static string ERROR_NullStep {
             get {
                 return ResourceManager.GetString("ERROR_NullStep", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace DewIt.Model.Processing {
         /// <summary>
         ///   Looks up a localized string similar to Step not found: {0}.
         /// </summary>
-        internal static string ERROR_Step_not_found {
+        public static string ERROR_Step_not_found {
             get {
                 return ResourceManager.GetString("ERROR_Step_not_found", resourceCulture);
             }
@@ -90,16 +90,34 @@ namespace DewIt.Model.Processing {
         /// <summary>
         ///   Looks up a localized string similar to Multiple steps with same UUID: [{0}].
         /// </summary>
-        internal static string ERROR_Steps_not_unique {
+        public static string ERROR_Steps_not_unique {
             get {
                 return ResourceManager.GetString("ERROR_Steps_not_unique", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Executing Step: {0}.
+        /// </summary>
+        public static string ExecutingStep {
+            get {
+                return ResourceManager.GetString("ExecutingStep", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finished..
+        /// </summary>
+        public static string Finished {
+            get {
+                return ResourceManager.GetString("Finished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0}: Validate and Cleanup.
         /// </summary>
-        internal static string fmt_ValidateAndCleanup {
+        public static string fmt_ValidateAndCleanup {
             get {
                 return ResourceManager.GetString("fmt_ValidateAndCleanup", resourceCulture);
             }
@@ -108,7 +126,7 @@ namespace DewIt.Model.Processing {
         /// <summary>
         ///   Looks up a localized string similar to Step failed: {0}.
         /// </summary>
-        internal static string msg_Step_Failed {
+        public static string msg_Step_Failed {
             get {
                 return ResourceManager.GetString("msg_Step_Failed", resourceCulture);
             }
@@ -117,7 +135,7 @@ namespace DewIt.Model.Processing {
         /// <summary>
         ///   Looks up a localized string similar to Step {0} of {1}.
         /// </summary>
-        internal static string msg_StepIndex {
+        public static string msg_StepIndex {
             get {
                 return ResourceManager.GetString("msg_StepIndex", resourceCulture);
             }
@@ -126,7 +144,7 @@ namespace DewIt.Model.Processing {
         /// <summary>
         ///   Looks up a localized string similar to Validating steps.
         /// </summary>
-        internal static string msg_Validating_Steps {
+        public static string msg_Validating_Steps {
             get {
                 return ResourceManager.GetString("msg_Validating Steps", resourceCulture);
             }
@@ -135,7 +153,7 @@ namespace DewIt.Model.Processing {
         /// <summary>
         ///   Looks up a localized string similar to Step is not necessary..
         /// </summary>
-        internal static string REASON_Step_not_Necessary {
+        public static string REASON_Step_not_Necessary {
             get {
                 return ResourceManager.GetString("REASON_Step_not_Necessary", resourceCulture);
             }

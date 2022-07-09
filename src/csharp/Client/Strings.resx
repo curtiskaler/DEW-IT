@@ -126,7 +126,4 @@
   <data name="ERROR_CouldNotInitRepos" xml:space="preserve">
     <value>Could not initialize repositories.</value>
   </data>
-  <data name="Finished" xml:space="preserve">
-    <value>Finished.</value>
-  </data>
 </root>

@@ -4,71 +4,33 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace DewIt.Model.Processing.Processes;
 
-// TODO: make previous step results available to next step, to prevent forcing rework
-
-public sealed class Process : ProcessEvents
+public sealed class Process : ProcessEvents, IProcess
 {
+    private readonly IProcessValidator _validator;
     private readonly List<IProcessStep> _steps;
-    private readonly IProcessResultFactory _processResultFactory;
-    private readonly IStepAndResultFactory _stepAndResultFactory;
-    private readonly IResultFactory _resultFactory;
 
-    public Process(IEnumerable<IProcessStep> steps) : this(steps, new ProcessResultFactory(),
-        new StepAndResultFactory(), new ResultFactory())
+    public Process(IEnumerable<IProcessStep> steps) : this(NullLogger.Instance, steps)
     {
     }
 
-    public Process(IEnumerable<IProcessStep> steps,
-        IProcessResultFactory processResultFactory,
-        IStepAndResultFactory stepAndResultFactory,
-        IResultFactory resultFactory)
-        : this(steps, processResultFactory, stepAndResultFactory, resultFactory, NullLogger.Instance)
+    public Process(ILogger logger, IEnumerable<IProcessStep> steps)
+        : this(logger, new ProcessValidator(logger), steps)
     {
     }
 
-    public Process(IEnumerable<IProcessStep> steps,
-        IProcessResultFactory processResultFactory,
-        IStepAndResultFactory stepAndResultFactory,
-        IResultFactory resultFactory,
-        ILogger logger
-    ) : base(logger)
+    public Process(ILogger logger, IProcessValidator validator, IEnumerable<IProcessStep> steps)
+        : base(logger)
     {
+        _validator = validator;
         _steps = steps.ToList();
-        _stepAndResultFactory = stepAndResultFactory;
-        _processResultFactory = processResultFactory;
-        _resultFactory = resultFactory;
-    }
-    
-    public IResult ValidateSteps()
-    {
-        var objective = ProcessingStrings.msg_Validating_Steps;
-
-        // ensure all step UUIDs are unique
-        var duplicates = _steps.GroupBy(it => it.UUID)
-            .Where(g => g.Count() > 1)
-            .Select(it => it.Key.ToString())
-            .ToList();
-
-
-        if (duplicates.Any())
-        {
-            var dupString = string.Join(", ", duplicates);
-            var reason = string.Format(ProcessingStrings.ERROR_Steps_not_unique, dupString);
-            var ex = new InvalidOperationException(reason);
-            return _resultFactory.FAILURE(objective, reason, ex);
-        }
-
-        return _resultFactory.SUCCESS(objective);
     }
 
-    public ProcessResult Execute()
+    public IProcessResult Execute()
     {
-        var total = _steps.Count;
-
+        var processResult = ProcessResultFactory.Create();
         OnProcessStarting();
 
-        var processResult = _processResultFactory.Create();
-
+        var total = _steps.Count;
         for (var index = 0; index < total; index++)
         {
             var stepNumber = index + 1;
@@ -77,33 +39,33 @@ public sealed class Process : ProcessEvents
             var necessary = step.IsNecessary();
             if (!necessary)
             {
-                var skipped = _resultFactory.SKIP(step.Title, ProcessingStrings.REASON_Step_not_Necessary);
+                var skipped = ResultFactory.SKIP(step.Title, ProcessingStrings.REASON_Step_not_Necessary);
                 OnStepSkipped(step, skipped, stepNumber, total);
                 continue;
             }
 
             OnStepStarting(step, stepNumber, total);
 
-            var execution = ExecuteStep(stepNumber, total, step, processResult.StepsAndResults);
+            var execution = ExecuteStep(stepNumber, total, step, processResult);
             if (execution.IsFailure())
             {
-                var stepAndResult = _stepAndResultFactory.Create(step, execution);
+                var stepAndResult = StepAndResultFactory.Create(step, execution);
                 processResult.StepsAndResults.Add(stepAndResult);
                 return processResult;
             }
 
-            var validation = ValidateAndCleanupStep(stepNumber, total, step);
+            var validation = _validator.ValidateAndCleanupStep(stepNumber, total, step);
             if (validation.IsFailure())
             {
-                var result = (validation as Failure)!;
-                var stepAndResult = _stepAndResultFactory.Create(step, result);
+                var failure = (validation as Failure)!;
+                var stepAndResult = StepAndResultFactory.Create(step, failure);
                 processResult.StepsAndResults.Add(stepAndResult);
                 return processResult;
             }
 
             OnStepComplete(step, (execution as Success)!, stepNumber, total);
 
-            var executionStepAndResult = _stepAndResultFactory.Create(step, execution);
+            var executionStepAndResult = StepAndResultFactory.Create(step, execution);
             processResult.StepsAndResults.Add(executionStepAndResult);
         }
 
@@ -111,41 +73,14 @@ public sealed class Process : ProcessEvents
         return processResult;
     }
 
-    private IResult ValidateAndCleanupStep(int stepNumber, int count, IProcessStep step)
-    {
-        OnStepValidationStarting(step, stepNumber, count);
-        try
-        {
-            var validation = step.ValidateAndCleanup();
-            if (validation.IsSkipped())
-            {
-                OnStepValidationSkipped(step, (validation as Skipped)!, stepNumber, count);
-            }
-            else if (validation.IsSuccess())
-            {
-                OnStepValidationComplete(step, (validation as Success)!, stepNumber, count);
-            }
-            else
-            {
-                OnStepValidationFailed(step, (validation as Failure)!, stepNumber, count);
-            }
-
-            return validation;
-        }
-        catch (Exception ex)
-        {
-            var result = _resultFactory.FAILURE(step.Title, ex.Message, ex);
-            OnStepValidationFailed(step, result, stepNumber, count);
-            return result;
-        }
-    }
-
-    private IResult ExecuteStep(int stepNumber, int count, IProcessStep step, IStepAndResultCollection previousSteps)
+    private IResult ExecuteStep(int stepNumber, int count, IProcessStep step, IProcessResult result)
     {
         OnStepExecutionStarting(step, stepNumber, count);
+
         try
         {
-            var execution = step.Execute(previousSteps);
+            var execution = step.Execute(result);
+
             if (execution.IsSkipped())
             {
                 OnStepExecutionSkipped(step, (execution as Skipped)!, stepNumber, count);
@@ -163,9 +98,9 @@ public sealed class Process : ProcessEvents
         }
         catch (Exception ex)
         {
-            var result = _resultFactory.FAILURE(step.Title, ex.Message, ex);
-            OnStepFailed(step, result, stepNumber, count);
-            return result;
+            var failure = ResultFactory.FAILURE(step.Title, ex.Message, ex);
+            OnStepFailed(step, failure, stepNumber, count);
+            return failure;
         }
     }
 }

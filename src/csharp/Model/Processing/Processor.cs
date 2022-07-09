@@ -1,24 +1,16 @@
-﻿using DewIt.Model.Processing.Processes;
+﻿using DewIt.Model.Processing.EventArgs;
+using DewIt.Model.Processing.Processes;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 namespace DewIt.Model.Processing;
 
 // TODO: Do we need something to be disposable here?
 
-public sealed class Processor : ProcessEvents, IProcessor
+public class Processor : ProcessEvents, IProcessor
 {
-    private bool _silent;
-
-    public Processor() : this(NullLogger.Instance, true)
+    public Processor(ILogger logger) : base(logger)
     {
     }
-
-    public Processor(ILogger logger, bool silent = false) : base(logger)
-    {
-        _silent = silent;
-    }
-
 
     public IProcessResult RunSteps(IEnumerable<IProcessStep> steps)
     {
@@ -27,24 +19,48 @@ public sealed class Processor : ProcessEvents, IProcessor
         return process.Execute();
     }
 
-    private void ForwardEvents(ProcessEvents process)
+    protected void ForwardEvents(IProcessEvents process)
     {
-        process.ProcessComplete += OnProcessComplete;
-        process.ProcessStarting += OnProcessStarting;
+        process.ProcessComplete += LogInvocation(_logger, OnProcessComplete);
+        process.ProcessStarting += LogInvocation(_logger, OnProcessStarting);
 
-        process.StepComplete += OnStepComplete;
-        process.StepFailed += OnStepFailed;
-        process.StepSkipped += OnStepSkipped;
-        process.StepStarting += OnStepStarting;
+        process.StepComplete += LogInvocation<StepCompletedEventArgs>(_logger, OnStepComplete);
+        process.StepFailed += LogInvocation<FailureEventArgs>(_logger, OnStepFailed);
+        process.StepSkipped += LogInvocation<SkippingEventArgs>(_logger, OnStepSkipped);
+        process.StepStarting += LogInvocation<StepStatusEventArgs>(_logger, OnStepStarting);
 
-        process.StepExecutionComplete += OnStepExecutionComplete;
-        process.StepExecutionFailed += OnStepExecutionFailed;
-        process.StepExecutionSkipped += OnStepExecutionSkipped;
-        process.StepExecutionStarting += OnStepExecutionStarting;
+        process.StepExecutionComplete += LogInvocation<StepCompletedEventArgs>(_logger, OnStepExecutionComplete);
+        process.StepExecutionFailed += LogInvocation<FailureEventArgs>(_logger, OnStepExecutionFailed);
+        process.StepExecutionSkipped += LogInvocation<SkippingEventArgs>(_logger, OnStepExecutionSkipped);
+        process.StepExecutionStarting += LogInvocation<StepStatusEventArgs>(_logger, OnStepExecutionStarting);
 
-        process.StepValidationComplete += OnStepValidationComplete;
-        process.StepValidationFailed += OnStepValidationFailed;
-        process.StepValidationSkipped += OnStepValidationSkipped;
-        process.StepValidationStarting += OnStepValidationStarting;
+        process.StepValidationComplete += LogInvocation<StepCompletedEventArgs>(_logger, OnStepValidationComplete);
+        process.StepValidationFailed += LogInvocation<FailureEventArgs>(_logger, OnStepValidationFailed);
+        process.StepValidationSkipped += LogInvocation<SkippingEventArgs>(_logger, OnStepValidationSkipped);
+        process.StepValidationStarting += LogInvocation<StepStatusEventArgs>(_logger, OnStepValidationStarting);
+    }
+
+    private static EventHandler LogInvocation(ILogger logger, EventHandler? handler)
+    {
+        void NewEventHandler(object? sender, System.EventArgs args)
+        {
+            if (handler == null) return;
+            logger.Log(LogLevel.Information, handler.Method.Name, Array.Empty<object>());
+            handler.Invoke(sender, args);
+        }
+
+        return NewEventHandler;
+    }
+
+    private static EventHandler<TEventArgs> LogInvocation<TEventArgs>(ILogger logger, EventHandler<TEventArgs>? handler)
+    {
+        void NewEventHandler(object? sender, TEventArgs args)
+        {
+            if (handler == null) return;
+            logger.Log(LogLevel.Information, handler.Method.Name, Array.Empty<object>());
+            handler.Invoke(sender, args);
+        }
+
+        return NewEventHandler;
     }
 }

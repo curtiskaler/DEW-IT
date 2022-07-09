@@ -2,9 +2,9 @@
 
 namespace DewIt.Model.Processing.Processes;
 
-public class StepAndResultFactory: IStepAndResultFactory
+public static class StepAndResultFactory
 {
-    public StepAndResult Create(IProcessStep step, IResult result)
+    public static StepAndResult Create(IProcessStep step, IResult result)
     {
         return new StepAndResult(step, result);
     }

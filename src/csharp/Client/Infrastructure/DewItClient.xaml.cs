@@ -1,20 +1,16 @@
 ﻿using DewIt.Client.infrastructure.shell;
 using DewIt.Model.DataTypes;
+using DewIt.Model.Infrastructure;
 
 namespace DewIt.Client.infrastructure;
 
-public partial class DewItClient : Application
+public partial class DewItClient
 {
     internal static DewItState State { get; private set; }
 
-	public DewItClient(DewItState state)
+	public DewItClient(IBootstrapper<DewItState> bootstrapper)
 	{
-        // This is the ctor for the Client.
-        // The object graph (dependencies) were initialized in EntryPoint.cs
-        State = state ?? throw new ArgumentNullException(nameof(state));
-
-        State.Initialize();
-
+        State = bootstrapper.Bootstrap();
         InitializeComponent();
         MainPage = new AppShell();
 	}

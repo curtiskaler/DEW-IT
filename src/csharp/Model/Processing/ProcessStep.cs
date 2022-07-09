@@ -11,11 +11,7 @@ public abstract class ProcessStep : IProcessStep
 {
     protected ILogger Logger { get; }
 
-    protected static IResultFactory ResultFactory { get; set; } = new ResultFactory();
-
-    /// <summary> Execute the step. </summary>
-    public abstract IResult Execute(IStepAndResultCollection previousSteps);
-
+    /// <summary> A unique identifier. </summary>
     public Guid UUID { get; init; }
 
     /// <summary> A short text description of what this step does. </summary>
@@ -33,7 +29,11 @@ public abstract class ProcessStep : IProcessStep
     public virtual FailureAction PostExecutionValidationFailureAction => FailureAction.STOP;
 
     /// <summary> Verify that everything got done correctly, and do any cleanup. </summary>
-    public virtual IResult ValidateAndCleanup() => new Success(string.Format(ProcessingStrings.fmt_ValidateAndCleanup, Title));
+    public virtual IResult ValidateAndCleanup() =>
+        new Success(string.Format(ProcessingStrings.fmt_ValidateAndCleanup, Title));
+
+    /// <summary> Execute the step. </summary>
+    public abstract IResult Execute(IProcessResult processResult);
     
     protected ProcessStep() : this(NullLogger.Instance)
     {
@@ -42,18 +42,5 @@ public abstract class ProcessStep : IProcessStep
     protected ProcessStep(ILogger logger)
     {
         Logger = logger;
-    }
-}
-
-public abstract class ProcessStep<TOut> : ProcessStep
-{
-    /// <summary> Execute the step, and include the output with the result. </summary>
-    public abstract override IResult<TOut> Execute(IStepAndResultCollection previousSteps);
-
-    protected ProcessStep() : base(NullLogger.Instance)
-    {
-    }
-    protected ProcessStep(ILogger logger) : base(logger)
-    {
     }
 }

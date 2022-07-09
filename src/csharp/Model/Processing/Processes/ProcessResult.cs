@@ -29,3 +29,13 @@ public class ProcessResult : IProcessResult
     public bool Skipped => StepsAndResults.All(it => it.Skipped);
     public bool Succeeded => StepsAndResults.All(it => it.Succeeded);
 }
+
+public class ProcessResult<TOut> : ProcessResult, IProcessResult<TOut> where TOut : new()
+{
+    public TOut Object { get; set; }
+
+    public ProcessResult()
+    {
+        Object = new TOut();
+    }
+}
