@@ -1,4 +1,5 @@
-﻿using DewIt.Model.DataTypes;
+﻿using DewIt.Model.CommandLine;
+using DewIt.Model.DataTypes;
 using DewIt.Model.Infrastructure;
 using DewIt.Model.Processing;
 using Microsoft.Extensions.Logging;
@@ -69,7 +70,7 @@ internal class Bootstrapper : IBootstrapper<DewItState>
     private static DewItState ResolveConfig(IStepAndResultCollection stepsAndResults)
     {
         // TODO: Iterate over the process results and build the application state.
-        
+        DEMO.Start();
 
         return new DewItState();
     }

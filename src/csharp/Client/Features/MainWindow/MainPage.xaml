@@ -4,7 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DewIt.Client.Features.MainWindow.MainPage"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:infra="clr-namespace:DewIt.Client.Infrastructure"
+             xmlns:font="clr-namespace:DewIt.Client.Resources.Fonts"
              xmlns:model="clr-namespace:DewIt.Model.DataTypes;assembly=DewIt.Model"
              xmlns:dataTemplates="clr-namespace:DewIt.Client.Features.DataTemplates"
              x:Name="mainPage"
@@ -131,7 +131,7 @@
                                     <ImageButton.Source>
                                         <FontImageSource
                                             FontFamily="{StaticResource FontAwesomeSolid}"
-                                            Glyph="{x:Static infra:IconFont.TrashAlt}"
+                                            Glyph="{x:Static font:IconFont.TrashAlt}"
                                             Size="{StaticResource ColumnTitleSize}"
                                             Color="{DynamicResource FontColor}" />
                                     </ImageButton.Source>

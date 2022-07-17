@@ -2,6 +2,7 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:infra="clr-namespace:DewIt.Client.Infrastructure"
+             xmlns:font="clr-namespace:DewIt.Client.Resources.Fonts"
              x:Class="DewIt.Client.Features.DataTemplates.CardView"
              x:Name="cardView"
              xmlns:model="clr-namespace:DewIt.Model.DataTypes;assembly=DewIt.Model" 
@@ -105,7 +106,7 @@
                 <ImageButton.Source>
                     <FontImageSource
                             FontFamily="{StaticResource FontAwesomeSolid}"
-                            Glyph="{x:Static infra:IconFont.TrashAlt}"
+                            Glyph="{x:Static font:IconFont.TrashAlt}"
                             Size="{StaticResource CardTitleSize}"
                             Color="{DynamicResource FontColor}" />
                 </ImageButton.Source>
