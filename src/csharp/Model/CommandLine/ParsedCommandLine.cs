@@ -1,4 +1,6 @@
-﻿namespace DewIt.Model.CommandLine;
+﻿using DewIt.Model.CommandLine.Model;
+
+namespace DewIt.Model.CommandLine;
 
 public class ParsedCommandLine //: IParsedCommandLine
 {
