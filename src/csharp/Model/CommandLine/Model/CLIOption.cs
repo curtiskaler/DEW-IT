@@ -7,11 +7,7 @@ public class CLIOption : CLIEntry
     {
     }
 
-    public CLIOption(string token, string alias, string description) : base(token, alias, description, 0, 0)
-    {
-    }
-
-    public CLIOption(string token, string? alias, string description, int numberOfPossibleArguments, int numberOfRequiredArguments) : base(token, alias, description, numberOfPossibleArguments, numberOfRequiredArguments)
+    public CLIOption(string token, string alias, string description) : base(token, alias, description)
     {
     }
 }

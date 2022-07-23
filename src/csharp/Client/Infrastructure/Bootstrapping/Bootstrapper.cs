@@ -70,7 +70,7 @@ internal class Bootstrapper : IBootstrapper<DewItState>
     private static DewItState ResolveConfig(IStepAndResultCollection stepsAndResults)
     {
         // TODO: Iterate over the process results and build the application state.
-        DEMO.Start();
+        //DEMO.Start1();
 
         return new DewItState();
     }

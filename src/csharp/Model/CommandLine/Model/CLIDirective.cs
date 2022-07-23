@@ -8,11 +8,7 @@ public class CLIDirective : CLICommand
     {
     }
 
-    public CLIDirective(string token, string alias, string description) : base(token, alias, description, 0, 0)
-    {
-    }
-
-    public CLIDirective(string token, string? alias, string description, int numberOfPossibleArguments, int numberOfRequiredArguments) : base(token, alias, description, numberOfPossibleArguments, numberOfRequiredArguments)
+    public CLIDirective(string token, string alias, string description) : base(token, alias, description)
     {
     }
 }
