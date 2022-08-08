@@ -1,6 +1,6 @@
 ﻿using DewIt.Model.DataTypes;
 
-namespace DewIt.Model.CommandLine.Model
+namespace DewIt.Model.LifeCycle
 {
     public class ExitCode : Enumeration<ExitCode>
     {

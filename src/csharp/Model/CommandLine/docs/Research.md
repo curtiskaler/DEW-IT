@@ -1,11 +1,13 @@
 ﻿# Command Line Research #
 
+## Resources Used ##
+
 Note that much of this content comes from outside sources:
 
 [Command Line Interface Guidelines][clig-dev]  
 [docopt: Command-line interface description language][docopt]  
 [picocli - a mighty tiny command line interface][picocli]
-
+[12 factor CLI][12-factor-cli]
 
 ## Concepts ##
 
@@ -56,7 +58,7 @@ Further reading: [User experience, CLIs, and breaking the world, by John Starich
 A `subcommand` is any command that comes after the root command. Each subcommand may have a hierarchy of subcommands of its own.
 
 #### Example ####
- 
+
 In the command line
 
 ```
@@ -344,8 +346,7 @@ For more information, check out [https://clig.dev][clig-dev].
 
 
 
-
-
+[12-factor-cli]: https://medium.com/@jdxcode/12-factor-cli-apps-dd3c227a0e46
 [picocli]: https://picocli.info/
 [clig-dev]: https://clig.dev
 [docopt]: http://docopt.org/
