@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<data name="ERROR_CannotCreateFailureWithoutReasonOrException" xml:space="preserve">
+		<value>Cannot create a failure object without a reason or at least one exception.</value>
+    </data>
+	<data name="ERROR_StepNotFound" xml:space="preserve">
+		<value>Step not found: {0}</value>
+    </data>
+	<data name="msg_StepFailed" xml:space="preserve">
+		<value>Step failed: {0}</value>
+    </data>
+	<data name="msg_StepIndex" xml:space="preserve">
+		<value>Step {0} of {1}</value>
+    </data>
+	<data name="msg_ValidatingSteps" xml:space="preserve">
+		<value>Validating Steps</value>
+    </data>
+	<data name="REASON_StepNotNecessary" xml:space="preserve">
+		<value>Step is not necessary.</value>
+    </data>
+	<data name="fmt_ValidateAndCleanup" xml:space="preserve">
+		<value>{0}: Validate and Cleanup</value>
+    </data>
+	<data name="msg_Finished" xml:space="preserve">
+		<value>Finished</value>
+    </data>
+	<data name="msg_ExecutingStep" xml:space="preserve">
+		<value>Executing Step: {0}</value>
+    </data>
+	<data name="ERROR_StepsNotUnique" xml:space="preserve">
+		<value>Multiple steps with the same UUID: [{0}]</value>
+    </data>
+	<data name="ERROR_NullStep" xml:space="preserve">
+		<value>Step is null.</value>
+    </data>
+	<data name="msg_ProcessFailedForMultipleReasons" xml:space="preserve">
+		<value>Process failed for multiple reasons.</value>
+    </data>
+</root>

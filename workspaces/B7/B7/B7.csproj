@@ -1,0 +1,66 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net7.0;net7.0-ios;net7.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
+		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+		<!-- <TargetFrameworks>$(TargetFrameworks);net7.0-tizen</TargetFrameworks> -->
+		<UseMaui>true</UseMaui>
+		<SingleProject>true</SingleProject>
+		<ImplicitUsings>enable</ImplicitUsings>
+
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
+	  <CreatePackage>false</CreatePackage>
+	</PropertyGroup>
+	<ItemGroup>
+	  <None Remove="Identifiers\" />
+	  <None Remove="Extensions\" />
+	  <None Remove="Persistence\" />
+	  <None Remove="Bootstrapping\" />
+	  <None Remove="Types\" />
+	  <None Remove="Processing\" />
+	  <None Remove="Processing\EventArgs\" />
+	  <None Remove="Processing\Enumerations\" />
+	  <None Remove="Processing\Interfaces\" />
+	  <None Remove="Processing\Results\" />
+	  <None Remove="Processing\Processes\" />
+	  <None Remove="Processing\Extensions\" />
+	  <None Remove="Events\" />
+	  <None Remove="Abstractions\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Identifiers\" />
+	  <Folder Include="Extensions\" />
+	  <Folder Include="Persistence\" />
+	  <Folder Include="Lifecycle\" />
+	  <Folder Include="Types\" />
+	  <Folder Include="Processing\" />
+	  <Folder Include="Processing\EventArgs\" />
+	  <Folder Include="Processing\Enumerations\" />
+	  <Folder Include="Processing\Interfaces\" />
+	  <Folder Include="Processing\Results\" />
+	  <Folder Include="Processing\Processes\" />
+	  <Folder Include="Processing\Extensions\" />
+	  <Folder Include="Events\" />
+	  <Folder Include="Abstractions\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Update="Processing\ProcessingStrings.resx">
+	    <Generator>PublicResXFileCodeGenerator</Generator>
+	    <LastGenOutput>ProcessingStrings.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	</ItemGroup>
+	<ItemGroup>
+	  <Compile Update="Processing\ProcessingStrings.Designer.cs">
+	    <DependentUpon>ProcessingStrings.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+</Project>
