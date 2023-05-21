@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="DewIt.Client.Features.AppShell.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:DewIt.Client.Features.AppShell"
+    xmlns:main="clr-namespace:DewIt.Client.Features.MainPage"
+    Shell.FlyoutBehavior="Disabled">
+
+    <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate main:MainPage}"
+        Route="MainPage" />
+
+</Shell>
+
